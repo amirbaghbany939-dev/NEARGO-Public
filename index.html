@@ -377,7 +377,11 @@ async function accessRequest(action,form){
  const payload={action,display_name:String(val(form,'display_name')||'').trim(),track:val(form,'track')};
  if(action==='login')payload.code=String(val(form,'code')||'').trim().toUpperCase();
  const {data,error}=await db.functions.invoke('neargo-access',{body:payload});
- if(error)throw new Error(data?.error||error.message||'خطا در ارتباط با سامانه ورود');
+ if(error){
+  let serverMessage='';
+  try{const response=error.context;const detail=response?.clone?await response.clone().json():null;serverMessage=detail?.error||detail?.message||''}catch(_e){}
+  throw new Error(serverMessage||data?.error||error.message||'خطا در ارتباط با سامانه ورود');
+ }
  if(data?.error)throw new Error(data.error);
  if(!data?.session||!data?.user)throw new Error('پاسخ ورود از سرور کامل نبود.');
  const {error:sessionError}=await db.auth.setSession({access_token:data.session.access_token,refresh_token:data.session.refresh_token});
