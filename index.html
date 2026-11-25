@@ -135,6 +135,7 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
 }
 @media(min-width:721px){.mobile-bottom-nav{display:none}}
 </style>
+<link rel="stylesheet" href="./neargo-enhancements.css">
 </head>
 <body>
 <div id="landingView" class="landing-shell">
@@ -454,8 +455,8 @@ async function loadAll(){const uid=state.user.id;const [p,prefs,tasks,logs,exams
  state.profile=p.data;state.prefs=prefs.data;state.tasks=tasks.data||[];state.logs=logs.data||[];state.exams=exams.data||[];state.resources=resources.data||[];state.schedule=schedule.data||[];state.topics=topics.data||[];state.studyPrefs=studyPrefs.data||null;
  const ids=state.exams.map(x=>x.id);if(ids.length){const rr=await db.from('exam_subject_results').select('*').in('exam_id',ids).order('created_at',{ascending:false});if(rr.error)throw rr.error;state.results=rr.data||[]}else state.results=[];
 }
-function fillOnboarding(){const f=$('onboardingForm'),p=state.profile||{},u=state.user;f.elements.display_name.value=p.display_name||u.user_metadata?.display_name||'';f.elements.track.value=p.track||u.user_metadata?.track||'math';f.elements.school_name.value=p.school_name||'';f.elements.target_university.value=p.target_university||'';f.elements.target_field.value=p.target_field||'';f.elements.daily_available_hours.value=p.daily_available_hours||4;f.elements.wake_time.value=p.wake_time||'07:00';f.elements.sleep_time.value=p.sleep_time||'23:00'}
-$('onboardingForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={user_id:state.user.id,display_name:val(f,'display_name'),track:val(f,'track'),grade:12,school_name:val(f,'school_name'),target_university:val(f,'target_university'),target_field:val(f,'target_field'),daily_available_hours:num(val(f,'daily_available_hours')),wake_time:val(f,'wake_time')||null,sleep_time:val(f,'sleep_time')||null,onboarding_completed:true};const {error}=await db.from('student_profiles').upsert(row,{onConflict:'user_id'});if(error){toast(friendlyError(error));return}await loadAll();hide('onboardingView');showPlanSetup()};
+function fillOnboarding(){const f=$('onboardingForm'),p=state.profile||{},u=state.user;f.elements.display_name.value=p.display_name||u.user_metadata?.display_name||'';f.elements.track.value=p.track||u.user_metadata?.track||'math';f.elements.school_name.value=p.school_name||'';f.elements.target_university.value=p.target_university||'';f.elements.target_field.value=p.target_field||'';f.elements.daily_available_hours.value=p.daily_available_hours||4;f.elements.wake_time.value=p.wake_time||'07:00';f.elements.sleep_time.value=p.sleep_time||'24:00'}
+$('onboardingForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={user_id:state.user.id,display_name:val(f,'display_name'),track:val(f,'track'),grade:12,school_name:val(f,'school_name'),target_university:val(f,'target_university'),target_field:val(f,'target_field'),daily_available_hours:num(val(f,'daily_available_hours')),wake_time:val(f,'wake_time')||null,sleep_time:val(f,'sleep_time')||'24:00',onboarding_completed:true};const {error}=await db.from('student_profiles').upsert(row,{onConflict:'user_id'});if(error){toast(friendlyError(error));return}await loadAll();hide('onboardingView');showPlanSetup()};
 
 function showPlanSetup(){hide('appView');hide('onboardingView');show('planSetupView');setupStep=0;setupDraft.school=[];setupDraft.classes=[];setupDraft.subjects=[];renderSetupStep()}
 function setupReadSchool(){setupDraft.school=[...document.querySelectorAll('[data-school-day]')].filter(x=>x.checked).map(x=>{const d=x.dataset.schoolDay;return {weekday:Number(d),bells:Number($('bells-'+d).value||1),start:$('school-start-'+d).value,end:$('school-end-'+d).value}})}
@@ -484,7 +485,7 @@ $('setupNext').onclick=async()=>{if(setupStep===0){setupReadSchool();for(const d
  if(setupStep===2){if(!setupDraft.subjects.length){$('setupMessage').textContent='حداقل یک درس برای مطالعه اضافه کن.';return}setupStep++;renderSetupStep();return}
  await saveSetupAndGenerate()};
 function buildSetupTasks(scheduleRows,subjects){
- const profile=state.profile||{},wake=timeToMin(profile.wake_time||'07:00'),sleep=Math.min(23*60,timeToMin(profile.sleep_time||'23:00')),dailyCap=Math.max(60,Math.min(480,Math.round(num(profile.daily_available_hours||4)*60)));
+ const profile=state.profile||{},wake=timeToMin(profile.wake_time||'07:00'),sleep=Math.min(24*60,timeToMin(profile.sleep_time||'24:00')),dailyCap=Math.max(60,Math.min(480,Math.round(num(profile.daily_available_hours||4)*60)));
  const now=new Date(),tasks=[],days=Array.from({length:7},(_,i)=>({date:new Date(now.getFullYear(),now.getMonth(),now.getDate()+i,12),sessions:[],minutes:0}));
  const queue=[];subjects.forEach(s=>{let left=Math.round(Number(s.hours)*60);while(left>0){const n=Math.min(50,left);queue.push({subject:s.subject,duration:n});left-=n}});
  queue.forEach((q,i)=>{let choices=days.map((d,j)=>({d,j})).filter(x=>x.d.minutes+q.duration<=dailyCap);if(!choices.length)return;choices.sort((a,b)=>a.d.minutes-b.d.minutes||((a.j+i)%7)-((b.j+i)%7));choices[0].d.sessions.push(q);choices[0].d.minutes+=q.duration});
@@ -534,7 +535,7 @@ function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0
 function buildPlanRows(){
  if(state.studyPrefs?.subjects?.length)return buildSetupTasks(state.schedule,state.studyPrefs.subjects);
  const profile=state.profile||{},hours=Math.max(1,Math.min(8,Math.floor(num(profile.daily_available_hours)||3)));
- const wake=Math.max(7*60,timeToMin(profile.wake_time||'07:00')),sleep=Math.min(23*60,timeToMin(profile.sleep_time||'23:00'));
+ const wake=Math.max(7*60,timeToMin(profile.wake_time||'07:00')),sleep=Math.min(24*60,timeToMin(profile.sleep_time||'24:00'));
  const weak=[...state.topics].sort((a,b)=>(a.confidence-b.confidence)||((b.priority==='high')-(a.priority==='high')));
  const fallback=profile.track==='experimental'?['زیست‌شناسی','شیمی','فیزیک','ریاضی']:['حسابان','فیزیک','شیمی','هندسه','گسسته'];
  const queue=weak.length?weak.map(x=>({subject:x.subject,topic:x.topic,confidence:x.confidence,priority:x.priority})):fallback.map(subject=>({subject,topic:'مرور و تمرین',confidence:3,priority:'normal'}));
@@ -639,4 +640,5 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigato
 db.auth.getSession().then(({data})=>{if(data.session)startApp(data.session.user)});
 })();
 </script>
+<script src="./neargo-enhancements.js"></script>
 </body></html>
