@@ -135,7 +135,7 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
 }
 @media(min-width:721px){.mobile-bottom-nav{display:none}}
 </style>
-<link rel="stylesheet" href="./neargo-enhancements.css">
+<link rel="stylesheet" href="./neargo-enhancements.css?v=nav4">
 </head>
 <body>
 <div id="landingView" class="landing-shell">
@@ -377,10 +377,10 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
 
 <div id="modalRoot"></div>
  <nav class="mobile-bottom-nav" aria-label="ناوبری اصلی">
-  <button class="active" data-tab="dashboard"><span>⌂</span>خانه</button>
-  <button data-tab="planner"><span>▦</span>برنامه</button>
-  <button data-tab="schedule"><span>◷</span>مدرسه</button>
-  <button data-tab="study"><span>✎</span>مطالعه</button>
+  <button class="active" type="button" data-near="dashboard"><span>⌂</span>خانه</button>
+  <button type="button" data-near="planner"><span>▦</span>برنامه</button>
+  <button type="button" data-near="schedule"><span>✧</span>برنامه‌ریزی</button>
+  <button type="button" data-near="checklist"><span>✓</span>چک‌لیست</button>
  </nav>
  <button id="aiChatFab" class="ai-chat-fab" type="button" aria-label="چت هوشمند"><span>✦</span><b>گفت‌وگو با هوش مصنوعی</b></button>
  <section id="aiChatPanel" class="ai-chat-panel hidden" aria-label="گفت‌وگو با هوش مصنوعی">
@@ -640,5 +640,5 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigato
 db.auth.getSession().then(({data})=>{if(data.session)startApp(data.session.user)});
 })();
 </script>
-<script src="./neargo-enhancements.js"></script>
+<script src="./neargo-enhancements.js?v=nav4"></script>
 </body></html>
