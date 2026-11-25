@@ -440,7 +440,7 @@ async function loadAll(){const uid=state.user.id;const [p,prefs,tasks,logs,exams
  db.from('student_topics').select('*').eq('user_id',uid).order('confidence'),
  db.from('student_study_preferences').select('*').eq('user_id',uid).maybeSingle()
  ]);
- for(const r of [p,prefs,tasks,logs,exams,resources,schedule,topics])if(r.error)throw r.error;
+ for(const r of [p,prefs,tasks,logs,exams,resources,schedule,topics,studyPrefs])if(r.error)throw r.error;
  state.profile=p.data;state.prefs=prefs.data;state.tasks=tasks.data||[];state.logs=logs.data||[];state.exams=exams.data||[];state.resources=resources.data||[];state.schedule=schedule.data||[];state.topics=topics.data||[];state.studyPrefs=studyPrefs.data||null;
  const ids=state.exams.map(x=>x.id);if(ids.length){const rr=await db.from('exam_subject_results').select('*').in('exam_id',ids).order('created_at',{ascending:false});if(rr.error)throw rr.error;state.results=rr.data||[]}else state.results=[];
 }
@@ -478,7 +478,7 @@ function buildSetupTasks(scheduleRows,subjects){
  const now=new Date(),tasks=[],days=Array.from({length:7},(_,i)=>({date:new Date(now.getFullYear(),now.getMonth(),now.getDate()+i,12),sessions:[],minutes:0}));
  const queue=[];subjects.forEach(s=>{let left=Math.round(Number(s.hours)*60);while(left>0){const n=Math.min(50,left);queue.push({subject:s.subject,duration:n});left-=n}});
  queue.forEach((q,i)=>{let choices=days.map((d,j)=>({d,j})).filter(x=>x.d.minutes+q.duration<=dailyCap);if(!choices.length)return;choices.sort((a,b)=>a.d.minutes-b.d.minutes||((a.j+i)%7)-((b.j+i)%7));choices[0].d.sessions.push(q);choices[0].d.minutes+=q.duration});
- days.forEach((d,idx)=>{const key=dateKey(d.date),weekday=d.date.getDay(),blocks=scheduleRows.filter(x=>x.weekday===weekday).map(x=>({start:timeToMin(x.starts_at),end:timeToMin(x.ends_at)})).sort((a,b)=>a.start-b.start);const schoolEnd=blocks.filter((_,i)=>scheduleRows.filter(x=>x.weekday===weekday)[i]?.schedule_type==='school').reduce((m,x)=>Math.max(m,x.end),0);let cursor=Math.max(wake+30,schoolEnd?schoolEnd+45:wake+30,idx===0?now.getHours()*60+now.getMinutes()+15:0);let used=0;
+ days.forEach((d,idx)=>{const key=dateKey(d.date),weekday=d.date.getDay(),blocks=scheduleRows.filter(x=>x.weekday===weekday).map(x=>({start:timeToMin(x.starts_at),end:timeToMin(x.ends_at)})).sort((a,b)=>a.start-b.start);const schoolEnd=scheduleRows.filter(x=>x.weekday===weekday&&x.schedule_type==='school').reduce((m,x)=>Math.max(m,timeToMin(x.ends_at)),0);let cursor=Math.max(wake+30,schoolEnd?schoolEnd+45:wake+30,idx===0?now.getHours()*60+now.getMinutes()+15:0);let used=0;
  d.sessions.forEach((q,si)=>{let found=-1;for(let t=cursor;t+q.duration<=sleep;t+=10){if(!blocks.some(b=>t<b.end&&t+q.duration>b.start)){found=t;break}}if(found<0)return;tasks.push({title:'مطالعه '+q.subject,subject:q.subject,task_date:key,starts_at:minToTime(found),duration_minutes:q.duration,task_type:'study',priority:'normal',notes:'[NEARGO-AUTO] برنامه ساخته‌شده از زمان‌های آزاد.'});blocks.push({start:found,end:found+q.duration});blocks.sort((a,b)=>a.start-b.start);used+=q.duration;cursor=found+q.duration+10;if(si<d.sessions.length-1&&cursor+10<sleep&&!blocks.some(b=>cursor<b.end&&cursor+10>b.start)){tasks.push({title:'استراحت کوتاه',task_date:key,starts_at:minToTime(cursor),duration_minutes:10,task_type:'rest',priority:'low',notes:'[NEARGO-AUTO] استراحت بین مطالعه‌ها.'});blocks.push({start:cursor,end:cursor+10});cursor+=10}})});
  return tasks;
 }
@@ -494,7 +494,7 @@ async function saveSetupAndGenerate(){
   if(rows.length){const ins=await db.from('student_schedule').insert(rows);if(ins.error)throw ins.error}
   const pref=await db.from('student_study_preferences').upsert({user_id:uid,subjects:setupDraft.subjects,setup_completed:true,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(pref.error)throw pref.error;
   const old=await db.from('study_tasks').delete().eq('user_id',uid).like('notes','[NEARGO-AUTO]%');if(old.error)throw old.error;
-  const tasks=buildSetupTasks(rows,setupDraft.subjects);if(tasks.length){const ins=await db.from('study_tasks').insert(tasks.map(x=>({...x,user_id:uid})));if(ins.error)throw ins.error}
+  const tasks=buildSetupTasks([...state.schedule.filter(x=>!String(x.notes||'').startsWith('[NEARGO-SETUP]')), ...rows],setupDraft.subjects);if(tasks.length){const ins=await db.from('study_tasks').insert(tasks.map(x=>({...x,user_id:uid})));if(ins.error)throw ins.error}
   await loadAll();hide('planSetupView');show('appView');renderAll();setupRealtime();updateWeather();$('plannerEngineStatus').textContent='برنامه هفتگی بر اساس مدرسه، کلاس‌ها و درس‌های انتخابی ساخته شد.';toast('برنامه هفتگی NEARGO ساخته شد.');
  }catch(err){$('setupMessage').textContent='ذخیره‌سازی انجام نشد: '+friendlyError(err);$('setupNext').disabled=false}
 }
@@ -513,6 +513,7 @@ function timeToMin(t){if(!t)return 0;const a=String(t).slice(0,5).split(':').map
 function minToTime(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
 function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
 function buildPlanRows(){
+ if(state.studyPrefs?.subjects?.length)return buildSetupTasks(state.schedule,state.studyPrefs.subjects);
  const profile=state.profile||{},hours=Math.max(1,Math.min(8,Math.floor(num(profile.daily_available_hours)||3)));
  const wake=timeToMin(profile.wake_time||'07:00'),sleep=timeToMin(profile.sleep_time||'23:00');
  const weak=[...state.topics].sort((a,b)=>(a.confidence-b.confidence)||((b.priority==='high')-(a.priority==='high')));
