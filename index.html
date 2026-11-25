@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100b1e"><meta name="description" content="NEARGO — برنامه‌ریزی تحصیلی شخصی، پیگیری مطالعه و تحلیل آزمون">
+<link rel="manifest" href="./manifest.json"><link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>NEARGO — Closer to Your Goal</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
+:root{color-scheme:dark;--bg:#0b0914;--panel:#151123;--panel2:#1d1730;--line:#342849;--text:#f7f2ff;--muted:#a99bbd;--purple:#a47aff;--pink:#dc9cff;--mint:#74e0bd;--amber:#f5c879;--red:#ff8297;--shadow:0 18px 55px #05030b88}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% -12%,#42226366 0,transparent 36%),radial-gradient(ellipse at 0% 60%,#24204455 0,transparent 42%),var(--bg);color:var(--text);font-family:Vazirmatn,system-ui,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:13px;padding:11px 16px;background:linear-gradient(135deg,#ad88ff,#7046c8);color:#fff;font-weight:700;box-shadow:0 9px 24px #8254d633;transition:.2s}button:hover{transform:translateY(-1px);filter:brightness(1.08)}button:disabled{opacity:.5;cursor:not-allowed;transform:none}.ghost{background:#ffffff08;border:1px solid var(--line);box-shadow:none;color:var(--text)}.danger-btn{background:#ff82971a;border:1px solid #ff829755;color:#ff9eae;box-shadow:none}.tiny{padding:7px 10px;font-size:12px}.field{display:grid;gap:6px}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;min-width:0;background:#0f0c19;border:1px solid var(--line);border-radius:12px;color:var(--text);padding:12px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px #a47aff1c}textarea{min-height:80px;resize:vertical}.muted{color:var(--muted)}.small{font-size:12px}.hidden{display:none!important}.wrap{max-width:1440px;margin:auto;padding:24px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#d2b9ff,#7646d3 70%);color:white;font-size:24px;font-weight:900;box-shadow:0 10px 35px #9661ff55;position:relative;overflow:hidden}.logo:after{content:"";position:absolute;width:36px;height:36px;border:1px solid #fff8;border-radius:12px;transform:rotate(35deg)}.brand h1{font-size:20px;letter-spacing:2px;margin:0}.brand small{color:var(--muted)}.auth-shell{min-height:100vh;display:grid;place-items:center;padding:20px}.auth-card{width:min(100%,470px);padding:30px;background:#171326e8;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}.auth-card h2{font-size:25px;margin:28px 0 8px}.auth-form{display:grid;gap:13px;margin-top:22px}.auth-tabs{display:flex;gap:8px;margin-top:22px}.auth-tabs button{flex:1}.notice{padding:12px 14px;border:1px solid #9e7aff44;background:#a47aff12;border-radius:14px;color:#d7c9f4;font-size:12px;line-height:1.9}.app-header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}.header-actions{display:flex;align-items:center;gap:10px}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);padding:7px 11px;border-radius:99px;color:var(--muted);font-size:12px;white-space:nowrap}.online-dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint)}.layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:18px}.sidebar,.card{background:#171326d9;border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(16px)}.sidebar{height:max-content;position:sticky;top:14px;padding:13px}.nav{display:grid;gap:6px}.nav button{display:flex;align-items:center;gap:11px;text-align:right;background:transparent;color:var(--muted);box-shadow:none;padding:12px}.nav button.active,.nav button:hover{background:#9d75ff1b;color:white;border:1px solid #9d75ff44}.nav .nav-ico{width:24px;text-align:center;font-size:17px}.side-note{margin:18px 5px 4px;padding:13px;border-radius:15px;background:linear-gradient(145deg,#302147,#1a1729);border:1px solid #5c417c66}.main{min-width:0}.tab{display:none}.tab.active{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}.hero{min-height:205px;padding:27px;background:linear-gradient(115deg,#38245c,#211a35 62%,#171326);border:1px solid #61458a;border-radius:26px;margin-bottom:16px;position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:16px}.hero:before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:#b78aff20;filter:blur(5px);left:-70px;top:-100px}.hero-copy{position:relative;z-index:1}.hero h2{font-size:27px;margin:12px 0 5px}.hero p{margin:0;color:#d1c3e5}.weather{position:relative;z-index:1;text-align:center;min-width:130px;padding:14px;border-radius:18px;background:#ffffff0c;border:1px solid #ffffff16}.weather-icon{font-size:36px}.weather strong{display:block;font-size:22px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:15px}.card{padding:17px}.metric-label{font-size:12px;color:var(--muted)}.metric{font-size:29px;font-weight:800;margin-top:5px}.metric-sub{font-size:11px;color:var(--muted)}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:22px 0 12px}.section-head h3{margin:0;font-size:17px}.two-col{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.list{display:grid;gap:9px}.item{padding:13px;border-radius:15px;background:#ffffff07;border:1px solid #ffffff10;display:flex;justify-content:space-between;align-items:center;gap:12px}.item-main{min-width:0}.item-title{font-weight:700}.item-meta{font-size:11px;color:var(--muted);margin-top:4px}.item-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px;font-size:13px}.form-card{padding:17px;margin-bottom:14px}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.form-grid .wide{grid-column:1/-1}.form-grid .span2{grid-column:span 2}.form-actions{display:flex;gap:8px;align-items:end}.tag{display:inline-flex;padding:4px 8px;border-radius:8px;font-size:10px;background:#a47aff18;color:#d9c9ff}.tag.high{background:#ff82971a;color:#ff9cad}.tag.done{background:#74e0bd18;color:#8bf0ce}.tag.amber{background:#f5c87918;color:#f5d28e}.tabs-head{display:flex;gap:8px;flex-wrap:wrap}.tabs-head button{background:#ffffff08;border:1px solid var(--line);box-shadow:none;color:var(--muted)}.tabs-head button.active{background:#9b73ff25;border-color:#9b73ff66;color:white}.progress{height:7px;border-radius:99px;background:#ffffff12;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,#8f69ed,#d49cff);border-radius:99px}.topic-row{display:grid;grid-template-columns:1fr 100px 100px auto;gap:10px;align-items:center}.stars{color:#f3c875;letter-spacing:2px}.table-wrap{overflow:auto}.data-table{width:100%;border-collapse:collapse;font-size:12px}.data-table th,.data-table td{text-align:right;padding:11px;border-bottom:1px solid #ffffff12;white-space:nowrap}.data-table th{color:var(--muted);font-weight:500}.chart-bars{display:flex;align-items:end;gap:9px;height:120px;padding-top:10px}.bar-col{flex:1;display:grid;gap:5px;justify-items:center;height:100%;align-content:end}.bar{width:100%;max-width:35px;min-height:3px;border-radius:7px 7px 2px 2px;background:linear-gradient(0deg,#744ac5,#c19cff)}.bar-label{font-size:10px;color:var(--muted)}.mentor-card{background:linear-gradient(135deg,#2b2044,#191528);border:1px solid #604887}.mentor-mark{font-size:21px}.toast{position:fixed;bottom:22px;left:22px;z-index:30;max-width:min(92vw,380px);padding:13px 17px;background:#211a33;border:1px solid #7655a6;border-radius:14px;box-shadow:var(--shadow);font-size:13px}.modal-backdrop{position:fixed;inset:0;background:#05030bcc;z-index:40;display:grid;place-items:center;padding:18px}.modal{width:min(100%,560px);max-height:90vh;overflow:auto;background:#171326;border:1px solid var(--line);border-radius:22px;padding:20px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.week-grid{display:grid;grid-template-columns:repeat(7,minmax(95px,1fr));gap:8px;overflow:auto;padding-bottom:5px}.day-col{background:#ffffff05;border:1px solid #ffffff12;border-radius:14px;padding:9px;min-height:120px}.day-col h4{margin:0 0 9px;font-size:12px}.schedule-chip{padding:7px;border-radius:9px;background:#9c75ff20;margin:6px 0;font-size:10px}.footer{text-align:center;color:#716783;font-size:10px;padding:22px}.mobile-nav{display:none}.onboarding{max-width:780px;margin:6vh auto}.setup-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.science-orbit{position:absolute;left:7%;bottom:-65px;width:190px;height:190px;border:1px solid #c49cff40;border-radius:50%;animation:spin 24s linear infinite}.science-orbit:before,.science-orbit:after{content:"";position:absolute;border:1px solid #c49cff38;border-radius:50%;inset:25px;transform:rotate(60deg) scaleX(.55)}.science-orbit:after{transform:rotate(-60deg) scaleX(.55)}@keyframes spin{to{transform:rotate(360deg)}}.math-symbol{position:absolute;color:#dfcaff22;font-size:52px;font-weight:900;animation:float 7s ease-in-out infinite}.math-symbol.s1{left:10%;top:12%}.math-symbol.s2{left:27%;bottom:12%;font-size:35px;animation-delay:-2s}.math-symbol.s3{left:40%;top:20%;font-size:27px;animation-delay:-4s}@keyframes float{50%{transform:translateY(-13px) rotate(8deg)}}.topline{height:1px;background:linear-gradient(90deg,transparent,#ffffff20,transparent);margin:14px 0}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:205px 1fr}.two-col{grid-template-columns:1fr}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.wrap{padding:13px}.layout{grid-template-columns:1fr}.sidebar{position:static;padding:8px}.nav{display:flex;overflow:auto;gap:5px}.nav button{white-space:nowrap;padding:9px 11px;font-size:11px}.side-note{display:none}.app-header{align-items:flex-start}.header-actions{flex-wrap:wrap;justify-content:flex-end}.header-actions .pill{display:none}.hero{min-height:170px;padding:20px}.hero h2{font-size:22px}.weather{min-width:95px;padding:9px}.weather-icon{font-size:28px}.weather strong{font-size:18px}.grid{gap:9px}.card{padding:13px}.metric{font-size:24px}.section-head{align-items:flex-start}.form-grid{grid-template-columns:1fr 1fr}.topic-row{grid-template-columns:1fr 1fr}.mobile-nav{display:none}}
+@media(max-width:440px){.wrap{padding:10px}.brand h1{font-size:17px}.logo{width:41px;height:41px}.header-actions{gap:6px}.header-actions button{padding:8px 10px;font-size:11px}.hero{display:block}.weather{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:15px}.weather-icon{font-size:25px}.weather strong{font-size:17px}.grid{grid-template-columns:1fr 1fr}.form-grid,.setup-grid{grid-template-columns:1fr}.form-grid .span2{grid-column:auto}.topic-row{grid-template-columns:1fr 1fr}.item{align-items:flex-start}.item-actions{flex-direction:column}.auth-card{padding:22px}}
+</style>
+</head>
+<body>
+<div id="authView" class="auth-shell">
+ <div class="auth-card">
+  <div class="brand"><div class="logo">N</div><div><h1>NEARGO</h1><small>Closer to Your Goal.</small></div></div>
+  <div id="loginPanel">
+   <h2>مسیرت رو از همین‌جا شروع کن</h2><p class="muted small">فضای تحصیلی اختصاصی تو؛ با برنامه‌ای که از اطلاعات خودت ساخته می‌شود.</p>
+   <form id="loginForm" class="auth-form">
+    <div class="field"><label>ایمیل</label><input name="email" type="email" autocomplete="username" required placeholder="ایمیل حساب"></div>
+    <div class="field"><label>رمز عبور</label><input name="password" type="password" autocomplete="current-password" required placeholder="رمز عبور"></div>
+    <button type="submit">ورود به NEARGO</button>
+   </form>
+   <div class="auth-tabs"><button class="ghost" id="showSignup">ساخت حساب دانش‌آموز</button><button class="ghost" id="showReset">بازیابی رمز</button></div>
+  </div>
+  <div id="signupPanel" class="hidden">
+   <h2>ساخت حساب تحصیلی</h2><p class="muted small">اطلاعات تحصیلی را بعداً هم می‌توانی کامل کنی.</p>
+   <form id="signupForm" class="auth-form">
+    <div class="field"><label>نام و نام خانوادگی</label><input name="display_name" required maxlength="70"></div>
+    <div class="field"><label>رشته</label><select name="track" required><option value="math">ریاضی و فیزیک</option><option value="experimental">علوم تجربی</option></select></div>
+    <div class="field"><label>ایمیل</label><input name="email" type="email" autocomplete="email" required></div>
+    <div class="field"><label>رمز عبور (حداقل ۸ نویسه)</label><input name="password" type="password" minlength="8" autocomplete="new-password" required></div>
+    <button type="submit">ایجاد حساب</button><button type="button" class="ghost" id="backLogin">بازگشت به ورود</button>
+   </form>
+  </div>
+  <div id="resetPanel" class="hidden">
+   <h2>بازیابی رمز عبور</h2><p class="muted small">لینک بازیابی به ایمیل حساب ارسال می‌شود.</p>
+   <form id="resetForm" class="auth-form"><div class="field"><label>ایمیل حساب</label><input name="email" type="email" required></div><button>ارسال لینک بازیابی</button><button type="button" class="ghost" id="backLogin2">بازگشت</button></form>
+  </div>
+  <p id="authMessage" class="small muted" aria-live="polite"></p>
+  <div class="notice">اطلاعات هر حساب جداگانه و با دسترسی امن پایگاه داده نگهداری می‌شود. رمز عبور را با کسی به اشتراک نگذار.</div>
+ </div>
+</div>
+
+<div id="onboardingView" class="wrap hidden">
+ <div class="onboarding card" style="padding:26px">
+  <div class="brand"><div class="logo">N</div><div><h1>NEARGO</h1><small>راه‌اندازی فضای تحصیلی</small></div></div>
+  <h2>اول مسیر تحصیلی‌ات را بشناسیم</h2><p class="muted small">این اطلاعات برای ساخت برنامه شخصی استفاده می‌شوند و هر زمان قابل ویرایش‌اند.</p>
+  <form id="onboardingForm" class="setup-grid">
+   <div class="field"><label>نام نمایشی</label><input name="display_name" required></div>
+   <div class="field"><label>رشته</label><select name="track"><option value="math">ریاضی و فیزیک</option><option value="experimental">علوم تجربی</option></select></div>
+   <div class="field"><label>مدرسه</label><input name="school_name" placeholder="نام مدرسه"></div>
+   <div class="field"><label>هدف دانشگاهی</label><input name="target_university" placeholder="مثلاً دانشگاه صنعتی سهند"></div>
+   <div class="field"><label>رشته دانشگاهی هدف</label><input name="target_field" placeholder="رشته مورد علاقه"></div>
+   <div class="field"><label>ساعت مطالعه آزاد روزانه</label><input name="daily_available_hours" type="number" min="1" max="14" step=".5" value="4"></div>
+   <div class="field"><label>ساعت بیداری</label><input name="wake_time" type="time" value="07:00"></div>
+   <div class="field"><label>ساعت خواب</label><input name="sleep_time" type="time" value="23:00"></div>
+   <div class="field" style="grid-column:1/-1"><button>ذخیره و ورود به داشبورد</button></div>
+  </form>
+ </div>
+</div>
+
+<div id="appView" class="wrap hidden">
+ <header class="app-header">
+  <div class="brand"><div class="logo">N</div><div><h1>NEARGO</h1><small>Closer to Your Goal.</small></div></div>
+  <div class="header-actions"><span class="pill"><i class="online-dot"></i> همگام‌سازی آنلاین</span><span id="userPill" class="pill"></span><button id="logoutBtn" class="ghost tiny">خروج</button></div>
+ </header>
+ <div class="layout">
+  <aside class="sidebar">
+   <nav class="nav" id="mainNav">
+    <button class="active" data-tab="dashboard"><span class="nav-ico">⌂</span>داشبورد</button>
+    <button data-tab="planner"><span class="nav-ico">▦</span>برنامه‌ریز روزانه</button>
+    <button data-tab="schedule"><span class="nav-ico">◷</span>مدرسه و کلاس‌ها</button>
+    <button data-tab="topics"><span class="nav-ico">◎</span>مباحث و نقاط ضعف</button>
+    <button data-tab="study"><span class="nav-ico">✎</span>گزارش مطالعه</button>
+    <button data-tab="exams"><span class="nav-ico">✦</span>آزمون و تحلیل</button>
+    <button data-tab="resources"><span class="nav-ico">▤</span>منابع آموزشی</button>
+    <button data-tab="mentor"><span class="nav-ico">✧</span>راهنمای تحصیلی</button>
+    <button data-tab="settings"><span class="nav-ico">⚙</span>تنظیمات</button>
+   </nav>
+   <div class="side-note"><div class="small muted">یادآوری مسیر</div><b style="display:block;margin:6px 0">قدم‌های کوچک، پیوستگی بزرگ.</b><span class="small muted">NEARGO · Closer to Your Goal.</span></div>
+  </aside>
+  <main class="main">
+   <section id="tab-dashboard" class="tab active">
+    <div class="hero"><div class="hero-copy"><span id="dayLabel" class="pill">امروز</span><h2 id="greeting">خوش آمدی</h2><p id="heroSub">برنامه امروزت را با تمرکز و واقع‌بینی پیش ببر.</p></div><div class="weather"><div class="weather-icon" id="weatherIcon">☀️</div><div><strong id="weatherTemp">--°</strong><span id="weatherText" class="small muted">در حال دریافت هوا...</span></div></div><div id="mathOrbit" class="science-orbit hidden"></div><div id="mathSymbols" class="hidden"><span class="math-symbol s1">∑</span><span class="math-symbol s2">π</span><span class="math-symbol s3">√x</span></div></div>
+    <div class="grid">
+     <div class="card"><div class="metric-label">فعالیت‌های امروز</div><div class="metric" id="metricTasks">۰</div><div class="metric-sub">فعالیت ثبت‌شده</div></div>
+     <div class="card"><div class="metric-label">مطالعه امروز</div><div class="metric" id="metricMinutes">۰</div><div class="metric-sub">دقیقه ثبت‌شده</div></div>
+     <div class="card"><div class="metric-label">درصد انجام برنامه</div><div class="metric" id="metricProgress">۰٪</div><div class="progress"><span id="progressBar" style="width:0%"></span></div></div>
+     <div class="card"><div class="metric-label">مباحث نیازمند تمرکز</div><div class="metric" id="metricWeak">۰</div><div class="metric-sub">بر اساس ارزیابی خودت</div></div>
+    </div>
+    <div class="two-col">
+     <div class="card"><div class="section-head"><h3>برنامه امروز</h3><button class="ghost tiny" data-open="planner">مدیریت برنامه</button></div><div id="todayTaskList" class="list"></div></div>
+     <div class="card mentor-card"><div class="section-head"><h3><span class="mentor-mark">✧</span> نکته امروز</h3><span class="tag">تحلیل شخصی</span></div><p id="mentorToday" style="line-height:2;margin:0">هنوز اطلاعات کافی برای پیشنهاد شخصی ثبت نشده است.</p><div class="topline"></div><div class="small muted" id="mentorTodaySub">با ثبت برنامه و نقاط ضعف، پیشنهادها دقیق‌تر می‌شوند.</div></div>
+    </div>
+    <div class="section-head"><h3>روند مطالعه در ۷ روز اخیر</h3><span class="small muted">دقیقه در روز</span></div>
+    <div class="card"><div id="weekChart" class="chart-bars"></div></div>
+   </section>
+
+   <section id="tab-planner" class="tab">
+    <div class="section-head"><h3>برنامه‌ریز روزانه</h3><span class="pill">برنامه قابل ویرایش</span></div>
+    <div class="card form-card"><form id="taskForm" class="form-grid">
+     <div class="field span2"><label>عنوان فعالیت</label><input name="title" required maxlength="120" placeholder="مثلاً آموزش مبحث مشتق"></div>
+     <div class="field"><label>درس</label><input name="subject" list="subjectOptions" placeholder="نام درس"><datalist id="subjectOptions"></datalist></div>
+     <div class="field"><label>تاریخ</label><input name="task_date" type="date" required></div>
+     <div class="field"><label>ساعت شروع</label><input name="starts_at" type="time"></div>
+     <div class="field"><label>مدت (دقیقه)</label><input name="duration_minutes" type="number" min="5" max="600" value="60" required></div>
+     <div class="field"><label>نوع فعالیت</label><select name="task_type"><option value="study">مطالعه</option><option value="homework">تکلیف</option><option value="school">مدرسه</option><option value="class">کلاس</option><option value="rest">استراحت</option><option value="other">سایر</option></select></div>
+     <div class="field"><label>اولویت</label><select name="priority"><option value="normal">معمولی</option><option value="high">بالا</option><option value="low">کم</option></select></div>
+     <div class="field"><label>توضیحات</label><input name="notes" placeholder="مبحث یا جزئیات"></div>
+     <div class="field form-actions"><button id="taskSubmit">افزودن به برنامه</button><button type="button" id="cancelTaskEdit" class="ghost hidden">لغو ویرایش</button></div>
+    </form></div>
+    <div class="section-head"><h3>فعالیت‌های تاریخ انتخاب‌شده</h3><input id="plannerDate" type="date" style="max-width:190px"></div>
+    <div id="plannerList" class="list"></div>
+   </section>
+
+   <section id="tab-schedule" class="tab">
+    <div class="section-head"><h3>مدرسه و کلاس‌های خارج از مدرسه</h3><span class="small muted">برنامه هفتگی ثابت</span></div>
+    <div class="card form-card"><form id="scheduleForm" class="form-grid">
+     <div class="field span2"><label>عنوان</label><input name="title" required placeholder="مثلاً مدرسه یا کلاس فیزیک"></div>
+     <div class="field"><label>نوع</label><select name="schedule_type"><option value="school">مدرسه</option><option value="class">کلاس خارج از مدرسه</option><option value="personal">فعالیت ثابت</option></select></div>
+     <div class="field"><label>روز هفته</label><select name="weekday"><option value="6">شنبه</option><option value="0">یکشنبه</option><option value="1">دوشنبه</option><option value="2">سه‌شنبه</option><option value="3">چهارشنبه</option><option value="4">پنجشنبه</option><option value="5">جمعه</option></select></div>
+     <div class="field"><label>شروع</label><input name="starts_at" type="time" required></div>
+     <div class="field"><label>پایان</label><input name="ends_at" type="time" required></div>
+     <div class="field"><label>درس (اختیاری)</label><input name="subject"></div>
+     <div class="field"><label>محل یا توضیح</label><input name="location"></div>
+     <div class="field form-actions"><button>ثبت در برنامه هفتگی</button></div>
+    </form></div>
+    <div id="weeklySchedule" class="week-grid"></div>
+    <div class="section-head"><h3>فهرست برنامه‌های ثابت</h3></div><div id="scheduleList" class="list"></div>
+   </section>
+
+   <section id="tab-topics" class="tab">
+    <div class="section-head"><h3>مباحث و نقاط ضعف</h3><span class="small muted">برنامه بر اساس خودارزیابی تو تنظیم می‌شود</span></div>
+    <div class="card form-card"><form id="topicForm" class="form-grid">
+     <div class="field"><label>درس</label><input name="subject" required placeholder="مثلاً حسابان"></div>
+     <div class="field span2"><label>مبحث</label><input name="topic" required placeholder="مثلاً حد و پیوستگی"></div>
+     <div class="field"><label>میزان تسلط از ۱ تا ۵</label><select name="confidence"><option value="1">۱ — خیلی ضعیف</option><option value="2">۲ — ضعیف</option><option value="3" selected>۳ — متوسط</option><option value="4">۴ — خوب</option><option value="5">۵ — مسلط</option></select></div>
+     <div class="field"><label>تمرکز پیشنهادی</label><select name="priority"><option value="high">بالا</option><option value="normal" selected>معمولی</option><option value="low">کم</option></select></div>
+     <div class="field"><label>توضیح</label><input name="notes" placeholder="مشکل دقیق یا منبع"></div>
+     <div class="field form-actions"><button>ثبت مبحث</button></div>
+    </form></div>
+    <div id="topicsList" class="list"></div>
+   </section>
+
+   <section id="tab-study" class="tab">
+    <div class="section-head"><h3>ثبت گزارش مطالعه</h3><span class="small muted">زمان واقعی مطالعه را ثبت کن</span></div>
+    <div class="card form-card"><form id="logForm" class="form-grid">
+     <div class="field"><label>درس</label><input name="subject" list="subjectOptions" required></div>
+     <div class="field"><label>مدت (دقیقه)</label><input name="studied_minutes" type="number" min="1" max="1440" required></div>
+     <div class="field"><label>تاریخ</label><input name="studied_on" type="date" required></div>
+     <div class="field span2"><label>مبحث یا توضیحات</label><input name="description" placeholder="چه چیزی مطالعه شد؟"></div>
+     <div class="field form-actions"><button>ثبت مطالعه</button></div>
+    </form></div>
+    <div class="section-head"><h3>سوابق مطالعه</h3></div><div id="logsList" class="list"></div>
+   </section>
+
+   <section id="tab-exams" class="tab">
+    <div class="section-head"><h3>آزمون‌ها و تحلیل عملکرد</h3><span class="small muted">آزمون را خودت ثبت می‌کنی؛ سامانه آزمون برگزار نمی‌کند.</span></div>
+    <div class="card form-card"><form id="examForm" class="form-grid">
+     <div class="field span2"><label>نام آزمون</label><input name="title" required placeholder="مثلاً آزمون آزمایشی"></div>
+     <div class="field"><label>نوع آزمون</label><select name="exam_type"><option value="practice">آزمایشی</option><option value="school">مدرسه</option><option value="quiz">کوییز</option><option value="other">سایر</option></select></div>
+     <div class="field"><label>تاریخ</label><input name="exam_date" type="date"></div>
+     <div class="field"><label>ساعت</label><input name="exam_time" type="time"></div>
+     <div class="field"><label>تعداد کل سؤال</label><input name="total_questions" type="number" min="0"></div>
+     <div class="field span2"><label>یادداشت</label><input name="notes" placeholder="مباحث آزمون"></div>
+     <div class="field form-actions"><button>ثبت آزمون</button></div>
+    </form></div>
+    <div class="section-head"><h3>ثبت نتیجه درس‌به‌درس</h3></div>
+    <div class="card form-card"><form id="resultForm" class="form-grid">
+     <div class="field span2"><label>آزمون</label><select name="exam_id" id="resultExamSelect" required><option value="">ابتدا آزمون را ثبت کن</option></select></div>
+     <div class="field"><label>درس</label><input name="subject" required placeholder="مثلاً فیزیک"></div>
+     <div class="field"><label>درست</label><input name="correct_count" type="number" min="0" value="0" required></div>
+     <div class="field"><label>غلط</label><input name="wrong_count" type="number" min="0" value="0" required></div>
+     <div class="field"><label>نزده</label><input name="blank_count" type="number" min="0" value="0" required></div>
+     <div class="field span2"><label>تحلیل مبحثی</label><input name="analysis" placeholder="علت اشتباه یا مبحث نیازمند مرور"></div>
+     <div class="field form-actions"><button>ذخیره نتیجه درس</button></div>
+    </form></div>
+    <div class="section-head"><h3>تاریخچه و تحلیل آزمون‌ها</h3></div><div id="examsList" class="list"></div>
+   </section>
+
+   <section id="tab-resources" class="tab">
+    <div class="section-head"><h3>کتاب‌ها و منابع آموزشی</h3></div>
+    <div class="card form-card"><form id="resourceForm" class="form-grid">
+     <div class="field span2"><label>نام منبع</label><input name="title" required></div>
+     <div class="field"><label>درس</label><input name="subject"></div>
+     <div class="field"><label>نوع منبع</label><select name="resource_type"><option value="book">کتاب</option><option value="video">ویدئو</option><option value="course">دوره</option><option value="website">وب‌سایت</option><option value="other">سایر</option></select></div>
+     <div class="field span2"><label>لینک (اختیاری)</label><input name="url" type="url" placeholder="https://"></div>
+     <div class="field"><label>یادداشت</label><input name="notes"></div>
+     <div class="field form-actions"><button>افزودن منبع</button></div>
+    </form></div>
+    <div id="resourcesList" class="list"></div>
+   </section>
+
+   <section id="tab-mentor" class="tab">
+    <div class="section-head"><h3>راهنمای تحصیلی NEARGO</h3><span class="tag">بر پایه اطلاعات ثبت‌شده</span></div>
+    <div class="card mentor-card"><div class="mentor-mark">✧</div><h3>گزارش وضعیت و پیشنهاد بعدی</h3><p id="mentorReport" style="line-height:2">برای ساخت پیشنهاد، ابتدا برنامه و نقاط ضعف خودت را ثبت کن.</p><button id="refreshMentor" class="ghost tiny">به‌روزرسانی تحلیل</button></div>
+    <div class="section-head"><h3>قواعد همراهی</h3></div>
+    <div class="card"><ul class="small muted" style="line-height:2.2;margin:0;padding-right:18px"><li>تمرکز بیشتر روی مباحثی می‌رود که خودت ضعیف اعلام کرده‌ای.</li><li>برنامه از زمان مدرسه، کلاس‌ها و ساعت خواب عبور نمی‌کند.</li><li>اگر از برنامه عقب بمانی، فعالیت‌ها برای روزهای بعد بازچینی می‌شوند؛ نه اینکه زمان استراحت حذف شود.</li><li>این نسخه تحلیل‌گر قاعده‌محور است و ادعای گفت‌وگوی هوش مصنوعی آنلاین ندارد.</li></ul></div>
+   </section>
+
+   <section id="tab-settings" class="tab">
+    <div class="section-head"><h3>پروفایل و تنظیمات</h3></div>
+    <div class="card form-card"><form id="profileForm" class="form-grid">
+     <div class="field"><label>نام نمایشی</label><input name="display_name" required></div>
+     <div class="field"><label>رشته</label><select name="track"><option value="math">ریاضی و فیزیک</option><option value="experimental">علوم تجربی</option></select></div>
+     <div class="field"><label>مدرسه</label><input name="school_name"></div>
+     <div class="field"><label>دانشگاه هدف</label><input name="target_university"></div>
+     <div class="field"><label>رشته هدف</label><input name="target_field"></div>
+     <div class="field"><label>ساعت آزاد روزانه</label><input name="daily_available_hours" type="number" min="1" max="14" step=".5"></div>
+     <div class="field"><label>ساعت بیداری</label><input name="wake_time" type="time"></div>
+     <div class="field"><label>ساعت خواب</label><input name="sleep_time" type="time"></div>
+     <div class="field"><label>تم</label><select name="theme" id="themeSelect"><option value="dark">تیره</option><option value="light">روشن (آزمایشی)</option><option value="system">مطابق دستگاه</option></select></div>
+     <div class="field"><label>حالت پیگیری دقیق</label><select name="strict_mentor_enabled" id="strictSelect"><option value="true">فعال</option><option value="false">غیرفعال</option></select></div>
+     <div class="field"><label>اعلان‌ها</label><select name="notifications_enabled" id="notifySelect"><option value="true">فعال</option><option value="false">غیرفعال</option></select></div>
+     <div class="field form-actions"><button>ذخیره تنظیمات</button></div>
+    </form></div>
+    <div class="card"><h3>حساب کاربری</h3><p class="small muted" id="accountEmail"></p><button id="changePassword" class="ghost tiny">ارسال لینک تغییر رمز به ایمیل</button></div>
+   </section>
+  </main>
+ </div>
+ <div class="footer">NEARGO · Closer to Your Goal. · فضای برنامه‌ریزی تحصیلی</div>
+</div>
+
+<div id="modalRoot"></div><div id="toast" class="toast hidden" role="status"></div>
+<script>
+(function(){
+'use strict';
+const SUPABASE_URL='https://aovrokjbyxmgtbrivyuo.supabase.co';
+const SUPABASE_KEY='sb_publishable_L2bTPoqiSnwc5fjb-LahfA_x7BfzacS';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const state={user:null,profile:null,prefs:null,tasks:[],logs:[],exams:[],results:[],resources:[],schedule:[],topics:[],editingTask:null,channel:null};
+const days=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+const faDate=d=>new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric',month:'long',year:'numeric'}).format(d);
+const isoToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const val=(form,name)=>new FormData(form).get(name);
+const num=(x)=>Number(x||0);
+const show=(id)=>$(id).classList.remove('hidden');
+const hide=(id)=>$(id).classList.add('hidden');
+function toast(s){$('toast').textContent=s;show('toast');clearTimeout(toast.timer);toast.timer=setTimeout(()=>hide('toast'),3300)}
+function friendlyError(e){const m=String(e?.message||e||'خطای نامشخص');if(m.includes('Invalid login'))return 'ایمیل یا رمز عبور درست نیست.';if(m.includes('Email not confirmed'))return 'ابتدا ایمیلت را تأیید کن.';if(m.includes('duplicate key'))return 'این مورد قبلاً ثبت شده است.';if(m.includes('row-level security'))return 'دسترسی این عملیات مجاز نیست؛ دوباره وارد شو.';return m.slice(0,180)}
+function setAuthPanel(which){['loginPanel','signupPanel','resetPanel'].forEach(id=>hide(id));show(which);$('authMessage').textContent=''}
+$('showSignup').onclick=()=>setAuthPanel('signupPanel');$('showReset').onclick=()=>setAuthPanel('resetPanel');$('backLogin').onclick=()=>setAuthPanel('loginPanel');$('backLogin2').onclick=()=>setAuthPanel('loginPanel');
+$('loginForm').onsubmit=async e=>{e.preventDefault();const f=e.target;$('authMessage').textContent='در حال ورود...';const {data,error}=await db.auth.signInWithPassword({email:val(f,'email'),password:val(f,'password')});if(error){$('authMessage').textContent=friendlyError(error);return}await startApp(data.user)};
+$('signupForm').onsubmit=async e=>{e.preventDefault();const f=e.target;$('authMessage').textContent='در حال ساخت حساب...';const {data,error}=await db.auth.signUp({email:val(f,'email'),password:val(f,'password'),options:{data:{display_name:val(f,'display_name'),track:val(f,'track')}}});if(error){$('authMessage').textContent=friendlyError(error);return}if(data.session&&data.user){await startApp(data.user)}else{$('authMessage').textContent='حساب ساخته شد. اگر تأیید ایمیل فعال است، صندوق ایمیلت را بررسی کن و سپس وارد شو.'}};
+$('resetForm').onsubmit=async e=>{e.preventDefault();const email=val(e.target,'email');const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});$('authMessage').textContent=error?friendlyError(error):'اگر این ایمیل ثبت شده باشد، لینک بازیابی برایش ارسال می‌شود.'};
+$('logoutBtn').onclick=async()=>{if(state.channel)await db.removeChannel(state.channel);await db.auth.signOut();location.reload()};
+db.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){toast('اکنون می‌توانی رمز جدید را از فرایند بازیابی تنظیم کنی.')}});
+function switchTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.id==='tab-'+id));document.querySelectorAll('#mainNav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='mentor')renderMentor()}
+document.querySelectorAll('#mainNav button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>switchTab(b.dataset.open));
+async function startApp(user){state.user=user;hide('authView');show('appView');$('userPill').textContent=user.email;$('accountEmail').textContent='ایمیل حساب: '+user.email;try{await loadAll();if(!state.profile||!state.profile.onboarding_completed){hide('appView');show('onboardingView');fillOnboarding()}else{renderAll();setupRealtime();updateWeather();}}catch(e){toast('بارگذاری اطلاعات: '+friendlyError(e))}}
+async function loadAll(){const uid=state.user.id;const [p,prefs,tasks,logs,exams,resources,schedule,topics]=await Promise.all([
+ db.from('student_profiles').select('*').eq('user_id',uid).maybeSingle(),
+ db.from('student_preferences').select('*').eq('user_id',uid).maybeSingle(),
+ db.from('study_tasks').select('*').eq('user_id',uid).order('task_date').order('starts_at'),
+ db.from('study_logs').select('*').eq('user_id',uid).order('studied_on',{ascending:false}).limit(250),
+ db.from('exams').select('*').eq('user_id',uid).order('exam_date',{ascending:false}),
+ db.from('student_resources').select('*').eq('user_id',uid).order('created_at',{ascending:false}),
+ db.from('student_schedule').select('*').eq('user_id',uid).order('weekday').order('starts_at'),
+ db.from('student_topics').select('*').eq('user_id',uid).order('confidence')
+ ]);
+ for(const r of [p,prefs,tasks,logs,exams,resources,schedule,topics])if(r.error)throw r.error;
+ state.profile=p.data;state.prefs=prefs.data;state.tasks=tasks.data||[];state.logs=logs.data||[];state.exams=exams.data||[];state.resources=resources.data||[];state.schedule=schedule.data||[];state.topics=topics.data||[];
+ const ids=state.exams.map(x=>x.id);if(ids.length){const rr=await db.from('exam_subject_results').select('*').in('exam_id',ids).order('created_at',{ascending:false});if(rr.error)throw rr.error;state.results=rr.data||[]}else state.results=[];
+}
+function fillOnboarding(){const f=$('onboardingForm'),p=state.profile||{},u=state.user;f.elements.display_name.value=p.display_name||u.user_metadata?.display_name||'';f.elements.track.value=p.track||u.user_metadata?.track||'math';f.elements.school_name.value=p.school_name||'';f.elements.target_university.value=p.target_university||'';f.elements.target_field.value=p.target_field||'';f.elements.daily_available_hours.value=p.daily_available_hours||4;f.elements.wake_time.value=p.wake_time||'07:00';f.elements.sleep_time.value=p.sleep_time||'23:00'}
+$('onboardingForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={user_id:state.user.id,display_name:val(f,'display_name'),track:val(f,'track'),grade:12,school_name:val(f,'school_name'),target_university:val(f,'target_university'),target_field:val(f,'target_field'),daily_available_hours:num(val(f,'daily_available_hours')),wake_time:val(f,'wake_time')||null,sleep_time:val(f,'sleep_time')||null,onboarding_completed:true};const {error}=await db.from('student_profiles').upsert(row,{onConflict:'user_id'});if(error){toast(friendlyError(error));return}await loadAll();hide('onboardingView');show('appView');renderAll();setupRealtime();updateWeather();toast('فضای تحصیلی آماده شد.')};
+function greeting(){const h=new Date().getHours();return h<11?'صبح بخیر':h<16?'ظهر بخیر':h<20?'عصر بخیر':'شب بخیر'}
+function renderAll(){const p=state.profile||{};const isMath=p.track==='math';$('greeting').textContent=greeting()+'، '+(p.display_name||'همراه NEARGO');$('heroSub').textContent=isMath?'امروز را با حل مسئله و پیشروی مفهومی بساز.':'امروز را با یادگیری مفهومی و مرور هوشمند پیش ببر.';$('dayLabel').textContent=faDate(new Date());if(isMath){show('mathSymbols');hide('mathOrbit')}else{hide('mathSymbols');show('mathOrbit')}
+ const t=isoToday(),today=state.tasks.filter(x=>x.task_date===t),done=today.filter(x=>x.status==='done').length,mins=state.logs.filter(x=>x.studied_on===t).reduce((a,x)=>a+num(x.studied_minutes),0),weak=state.topics.filter(x=>x.confidence<=2||x.priority==='high').length;
+ $('metricTasks').textContent=String(today.length).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);$('metricMinutes').textContent=String(mins).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);const pct=today.length?Math.round(done/today.length*100):0;$('metricProgress').textContent=pct+'٪';$('progressBar').style.width=pct+'%';$('metricWeak').textContent=weak;
+ renderTaskList('todayTaskList',today);renderPlanner();renderSchedule();renderTopics();renderLogs();renderExams();renderResources();renderSettings();renderChart();renderMentor();
+}
+function renderTaskList(id,items){const sorted=[...items].sort((a,b)=>(a.starts_at||'').localeCompare(b.starts_at||''));$(id).innerHTML=sorted.length?sorted.map(x=>'<div class="item"><div class="item-main"><div class="item-title">'+esc(x.title)+'</div><div class="item-meta">'+esc(x.subject||'بدون درس')+' · '+(x.starts_at||'بدون ساعت')+' · '+x.duration_minutes+' دقیقه</div></div><div class="item-actions"><span class="tag '+(x.status==='done'?'done':x.priority==='high'?'high':'')+'">'+(x.status==='done'?'انجام‌شده':x.priority==='high'?'اولویت بالا':'در انتظار')+'</span><button class="ghost tiny" data-task-toggle="'+x.id+'">'+(x.status==='done'?'بازگردانی':'انجام شد')+'</button></div></div>').join(''):'<div class="empty">برای امروز هنوز فعالیتی ثبت نشده است.</div>';$(id).querySelectorAll('[data-task-toggle]').forEach(b=>b.onclick=()=>toggleTask(b.dataset.taskToggle))}
+function renderPlanner(){const date=$('plannerDate').value||isoToday();const items=state.tasks.filter(x=>x.task_date===date);renderTaskList('plannerList',items);$('plannerList').querySelectorAll('.item').forEach((el,i)=>{const x=items[i];const actions=el.querySelector('.item-actions');actions.insertAdjacentHTML('beforeend','<button class="ghost tiny" data-edit="'+x.id+'">ویرایش</button><button class="danger-btn tiny" data-delete="'+x.id+'">حذف</button>')});$('plannerList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editTask(b.dataset.edit));$('plannerList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteTask(b.dataset.delete))}
+async function refreshData(){await loadAll();renderAll()}
+$('plannerDate').value=isoToday();$('plannerDate').onchange=renderPlanner;
+function resetTaskForm(){state.editingTask=null;$('taskForm').reset();$('taskForm').elements.task_date.value=$('plannerDate').value||isoToday();$('taskSubmit').textContent='افزودن به برنامه';hide('cancelTaskEdit')}
+function editTask(id){const x=state.tasks.find(t=>t.id===id);if(!x)return;state.editingTask=id;const f=$('taskForm');for(const k of ['title','subject','task_date','starts_at','duration_minutes','task_type','priority','notes'])if(f.elements[k])f.elements[k].value=x[k]??'';$('taskSubmit').textContent='ذخیره تغییرات';show('cancelTaskEdit');switchTab('planner');window.scrollTo({top:0,behavior:'smooth'})}
+$('cancelTaskEdit').onclick=resetTaskForm;
+$('taskForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={title:val(f,'title'),subject:val(f,'subject')||null,task_date:val(f,'task_date'),starts_at:val(f,'starts_at')||null,duration_minutes:num(val(f,'duration_minutes')),task_type:val(f,'task_type'),priority:val(f,'priority'),notes:val(f,'notes')||null};let r=state.editingTask?await db.from('study_tasks').update(row).eq('id',state.editingTask):await db.from('study_tasks').insert(row);if(r.error){toast(friendlyError(r.error));return}toast(state.editingTask?'برنامه ویرایش شد.':'به برنامه اضافه شد.');resetTaskForm();await refreshData()};
+async function toggleTask(id){const x=state.tasks.find(t=>t.id===id);if(!x)return;const status=x.status==='done'?'planned':'done';const {error}=await db.from('study_tasks').update({status,completed_at:status==='done'?new Date().toISOString():null}).eq('id',id);if(error){toast(friendlyError(error));return}await refreshData()}
+async function deleteTask(id){if(!confirm('این فعالیت حذف شود؟'))return;const {error}=await db.from('study_tasks').delete().eq('id',id);if(error){toast(friendlyError(error));return}await refreshData();toast('فعالیت حذف شد.')}
+$('scheduleForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={title:val(f,'title'),schedule_type:val(f,'schedule_type'),weekday:num(val(f,'weekday')),starts_at:val(f,'starts_at'),ends_at:val(f,'ends_at'),subject:val(f,'subject')||null,location:val(f,'location')||null};if(row.ends_at<=row.starts_at){toast('ساعت پایان باید بعد از شروع باشد.');return}const {error}=await db.from('student_schedule').insert(row);if(error){toast(friendlyError(error));return}f.reset();await refreshData();toast('برنامه هفتگی ثبت شد.')};
+function renderSchedule(){const daysFa=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];$('weeklySchedule').innerHTML=daysFa.map((d,i)=>{const items=state.schedule.filter(x=>x.weekday===i);return '<div class="day-col"><h4>'+d+'</h4>'+(items.length?items.map(x=>'<div class="schedule-chip"><b>'+esc(x.title)+'</b><br>'+x.starts_at.slice(0,5)+'–'+x.ends_at.slice(0,5)+'</div>').join(''):'<span class="small muted">—</span>')+'</div>'}).join('');$('scheduleList').innerHTML=state.schedule.length?state.schedule.map(x=>'<div class="item"><div class="item-main"><b>'+esc(x.title)+'</b><div class="item-meta">'+daysFa[x.weekday]+' · '+x.starts_at.slice(0,5)+' تا '+x.ends_at.slice(0,5)+' · '+(x.schedule_type==='school'?'مدرسه':x.schedule_type==='class'?'کلاس':'فعالیت ثابت')+'</div></div><button class="danger-btn tiny" data-schedule-delete="'+x.id+'">حذف</button></div>').join(''):'<div class="empty">هنوز برنامه ثابتی ثبت نشده است.</div>';$('scheduleList').querySelectorAll('[data-schedule-delete]').forEach(b=>b.onclick=async()=>{if(!confirm('حذف شود؟'))return;const {error}=await db.from('student_schedule').delete().eq('id',b.dataset.scheduleDelete);if(error)toast(friendlyError(error));else refreshData()})}
+$('topicForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={subject:val(f,'subject'),topic:val(f,'topic'),confidence:num(val(f,'confidence')),priority:val(f,'priority'),notes:val(f,'notes')||null};const {error}=await db.from('student_topics').upsert(row,{onConflict:'user_id,subject,topic'});if(error){toast(friendlyError(error));return}f.reset();await refreshData();toast('مبحث ذخیره شد.')};
+function renderTopics(){$('topicsList').innerHTML=state.topics.length?state.topics.map(x=>'<div class="item"><div class="item-main"><div class="item-title">'+esc(x.subject)+' — '+esc(x.topic)+'</div><div class="item-meta">'+esc(x.notes||'بدون توضیح')+' · <span class="stars">'+('★'.repeat(x.confidence))+('☆'.repeat(5-x.confidence))+'</span></div></div><div class="item-actions"><span class="tag '+(x.confidence<=2||x.priority==='high'?'high':'')+'">'+(x.confidence<=2?'نیازمند تمرکز':x.priority==='high'?'اولویت بالا':'در حال یادگیری')+'</span><button class="danger-btn tiny" data-topic-delete="'+x.id+'">حذف</button></div></div>').join(''):'<div class="empty">هنوز مبحثی ثبت نکرده‌ای. هرچه خودارزیابی دقیق‌تر باشد، پیشنهادها بهتر می‌شوند.</div>';$('topicsList').querySelectorAll('[data-topic-delete]').forEach(b=>b.onclick=async()=>{const {error}=await db.from('student_topics').delete().eq('id',b.dataset.topicDelete);if(error)toast(friendlyError(error));else refreshData()});const subjects=[...new Set(state.topics.map(x=>x.subject).concat(state.tasks.map(x=>x.subject).filter(Boolean)))];$('subjectOptions').innerHTML=subjects.map(s=>'<option value="'+esc(s)+'"></option>').join('')}
+$('logForm').elements.studied_on.value=isoToday();
+$('logForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={subject:val(f,'subject'),studied_minutes:num(val(f,'studied_minutes')),studied_on:val(f,'studied_on'),description:val(f,'description')||null};const {error}=await db.from('study_logs').insert(row);if(error){toast(friendlyError(error));return}f.reset();f.elements.studied_on.value=isoToday();await refreshData();toast('گزارش مطالعه ثبت شد.')};
+function renderLogs(){$('logsList').innerHTML=state.logs.length?state.logs.slice(0,70).map(x=>'<div class="item"><div class="item-main"><b>'+esc(x.subject)+'</b><div class="item-meta">'+x.studied_on+' · '+esc(x.description||'')+'</div></div><span class="pill">'+x.studied_minutes+' دقیقه</span></div>').join(''):'<div class="empty">گزارشی ثبت نشده است.</div>'}
+$('examForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={title:val(f,'title'),exam_type:val(f,'exam_type'),exam_date:val(f,'exam_date')||null,exam_time:val(f,'exam_time')||null,total_questions:num(val(f,'total_questions'))||null,notes:val(f,'notes')||null};const {error}=await db.from('exams').insert(row);if(error){toast(friendlyError(error));return}f.reset();await refreshData();toast('آزمون ثبت شد؛ حالا نتیجه هر درس را وارد کن.')};
+function renderExams(){$('resultExamSelect').innerHTML='<option value="">انتخاب آزمون</option>'+state.exams.map(x=>'<option value="'+x.id+'">'+esc(x.title)+' · '+(x.exam_date||'بدون تاریخ')+'</option>').join('');$('examsList').innerHTML=state.exams.length?state.exams.map(x=>{const rr=state.results.filter(r=>r.exam_id===x.id);return '<div class="card" style="margin-bottom:10px"><div class="section-head" style="margin-top:0"><div><b>'+esc(x.title)+'</b><div class="item-meta">'+(x.exam_date||'بدون تاریخ')+' '+(x.exam_time||'')+' · '+esc(x.exam_type)+'</div></div><span class="tag">'+rr.length+' درس تحلیل‌شده</span></div>'+(rr.length?'<div class="table-wrap"><table class="data-table"><thead><tr><th>درس</th><th>درست</th><th>غلط</th><th>نزده</th><th>درصد تقریبی</th></tr></thead><tbody>'+rr.map(r=>{const total=num(r.correct_count)+num(r.wrong_count)+num(r.blank_count);const pct=total?Math.round((num(r.correct_count)-num(r.wrong_count)/3)/total*100):0;return '<tr><td>'+esc(r.subject)+'</td><td>'+r.correct_count+'</td><td>'+r.wrong_count+'</td><td>'+r.blank_count+'</td><td>'+pct+'٪</td></tr><tr><td colspan="5" class="muted">تحلیل: '+esc(r.analysis||'ثبت نشده')+'</td></tr>'}).join('')+'</tbody></table></div>':'<p class="small muted">نتیجه درس‌ها هنوز ثبت نشده است.</p>')+'</div>'}).join(''):'<div class="empty">آزمونی ثبت نشده است.</div>'}
+$('resultForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const exam=state.exams.find(x=>x.id===val(f,'exam_id'));if(!exam){toast('ابتدا یک آزمون انتخاب کن.');return}const c=num(val(f,'correct_count')),w=num(val(f,'wrong_count')),b=num(val(f,'blank_count'));const row={exam_id:exam.id,user_id:state.user.id,subject:val(f,'subject'),correct_count:c,wrong_count:w,blank_count:b,analysis:val(f,'analysis')||null};const {error}=await db.from('exam_subject_results').insert(row);if(error){toast(friendlyError(error));return}f.reset();await refreshData();toast('نتیجه و تحلیل درس ذخیره شد.')};
+$('resourceForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={title:val(f,'title'),subject:val(f,'subject')||null,resource_type:val(f,'resource_type'),url:val(f,'url')||null,notes:val(f,'notes')||null};const {error}=await db.from('student_resources').insert(row);if(error){toast(friendlyError(error));return}f.reset();await refreshData();toast('منبع اضافه شد.')};
+function renderResources(){$('resourcesList').innerHTML=state.resources.length?state.resources.map(x=>'<div class="item"><div class="item-main"><b>'+esc(x.title)+'</b><div class="item-meta">'+esc(x.subject||'بدون درس')+' · '+esc(x.resource_type)+' · '+esc(x.notes||'')+'</div></div><div class="item-actions">'+(x.url?'<a class="pill" target="_blank" rel="noopener noreferrer" href="'+esc(x.url)+'">بازکردن</a>':'')+'<button class="danger-btn tiny" data-resource-delete="'+x.id+'">حذف</button></div></div>').join(''):'<div class="empty">منبعی ثبت نشده است.</div>';$('resourcesList').querySelectorAll('[data-resource-delete]').forEach(b=>b.onclick=async()=>{if(!confirm('این منبع حذف شود؟'))return;const {error}=await db.from('student_resources').delete().eq('id',b.dataset.resourceDelete);if(error)toast(friendlyError(error));else refreshData()})}
+function renderSettings(){const p=state.profile||{},f=$('profileForm');for(const k of ['display_name','track','school_name','target_university','target_field','daily_available_hours','wake_time','sleep_time'])if(f.elements[k])f.elements[k].value=p[k]??'';$('themeSelect').value=state.prefs?.theme||'dark';$('strictSelect').value=String(state.prefs?.strict_mentor_enabled??true);$('notifySelect').value=String(state.prefs?.notifications_enabled??true)}
+$('profileForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const profile={user_id:state.user.id,display_name:val(f,'display_name'),track:val(f,'track'),grade:12,school_name:val(f,'school_name')||null,target_university:val(f,'target_university')||null,target_field:val(f,'target_field')||null,daily_available_hours:num(val(f,'daily_available_hours')),wake_time:val(f,'wake_time')||null,sleep_time:val(f,'sleep_time')||null,onboarding_completed:true};const {error}=await db.from('student_profiles').upsert(profile,{onConflict:'user_id'});if(error){toast(friendlyError(error));return}const pref={user_id:state.user.id,theme:val(f,'theme'),strict_mentor_enabled:val(f,'strict_mentor_enabled')==='true',notifications_enabled:val(f,'notifications_enabled')==='true'};const pr=await db.from('student_preferences').upsert(pref,{onConflict:'user_id'});if(pr.error){toast(friendlyError(pr.error));return}await refreshData();toast('تنظیمات ذخیره شد.')};
+$('changePassword').onclick=async()=>{const {error}=await db.auth.resetPasswordForEmail(state.user.email,{redirectTo:location.origin+location.pathname});toast(error?friendlyError(error):'لینک بازیابی رمز به ایمیلت ارسال شد.')};
+function renderChart(){const daysData=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');const mins=state.logs.filter(x=>x.studied_on===key).reduce((a,x)=>a+num(x.studied_minutes),0);daysData.push({label:new Intl.DateTimeFormat('fa-IR',{weekday:'short'}).format(d),mins})}const max=Math.max(60,...daysData.map(x=>x.mins));$('weekChart').innerHTML=daysData.map(x=>'<div class="bar-col"><b class="small">'+(x.mins?x.mins:'')+'</b><div class="bar" style="height:'+Math.max(3,x.mins/max*80)+'px"></div><span class="bar-label">'+x.label+'</span></div>').join('')}
+function renderMentor(){const p=state.profile||{},weak=state.topics.filter(x=>x.confidence<=2||x.priority==='high').sort((a,b)=>a.confidence-b.confidence),pending=state.tasks.filter(x=>x.task_date<=isoToday()&&x.status!=='done'),today=state.tasks.filter(x=>x.task_date===isoToday()),study=state.logs.filter(x=>x.studied_on===isoToday()).reduce((a,x)=>a+x.studied_minutes,0);let out=[];if(weak.length)out.push('اولویت علمی فعلی تو «'+weak[0].subject+'؛ '+weak[0].topic+'» است. پیشنهاد می‌شود در برنامه بعدی یک بازه آموزشی کوتاه و سپس چند تمرین هدفمند برای آن قرار بدهی.');if(pending.length)out.push(pending.length+' فعالیت از امروز یا روزهای قبل هنوز تکمیل نشده است. فقط موارد مهم را به روزهای آزاد منتقل کن و زمان خواب را جابه‌جا نکن.');if(!weak.length)out.push('هنوز مبحث ضعیفی ثبت نکرده‌ای. از بخش «مباحث و نقاط ضعف» میزان تسلط واقعی‌ات را مشخص کن تا زمان مطالعه بهتر توزیع شود.');if(!today.length)out.push('برنامه امروز خالی است؛ سه فعالیت مشخص و واقع‌بینانه ثبت کن، نه یک فهرست طولانی.');if(study===0)out.push('هنوز زمان مطالعه امروز ثبت نشده است. پس از هر بازه، مدت واقعی را ثبت کن.');else out.push('تا این لحظه '+study+' دقیقه مطالعه ثبت شده است. کیفیت و تحلیل مهم‌تر از صرفاً بالا بردن ساعت مطالعه است.');$('mentorReport').textContent=out.join(' ');$('mentorToday').textContent=weak.length?'برای '+weak[0].subject+' وقت بیشتری کنار بگذار؛ مبحث '+weak[0].topic+' فعلاً در اولویت است.':'اگر مبحثی برایت دشوار است، آن را در بخش نقاط ضعف ثبت کن تا برنامه بر همان اساس تنظیم شود.';$('mentorTodaySub').textContent=pending.length?'فعالیت‌های عقب‌مانده: '+pending.length+' مورد. بازچینی بدون حذف استراحت.':'پیشنهادها با داده‌های ثبت‌شده تو به‌روزرسانی می‌شوند.'}
+$('refreshMentor').onclick=renderMentor;
+function setupRealtime(){if(state.channel)db.removeChannel(state.channel);state.channel=db.channel('neargo-'+state.user.id).on('postgres_changes',{event:'*',schema:'public',table:'study_tasks',filter:'user_id=eq.'+state.user.id},()=>refreshData()).on('postgres_changes',{event:'*',schema:'public',table:'student_schedule',filter:'user_id=eq.'+state.user.id},()=>refreshData()).on('postgres_changes',{event:'*',schema:'public',table:'student_topics',filter:'user_id=eq.'+state.user.id},()=>refreshData()).subscribe()}
+async function updateWeather(){const fallback={latitude:38.08,longitude:46.29};const fetchWeather=async(lat,lon)=>{const u='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code&timezone=auto';const r=await fetch(u);if(!r.ok)throw Error('weather');return r.json()};try{let coords=fallback;if(navigator.geolocation){coords=await new Promise(resolve=>navigator.geolocation.getCurrentPosition(p=>resolve({latitude:p.coords.latitude,longitude:p.coords.longitude}),()=>resolve(fallback),{timeout:2500,maximumAge:3600000}))}const data=await fetchWeather(coords.latitude,coords.longitude);const c=data.current;const code=c.weather_code;const info=code===0?['☀️','صاف']:code<=3?['🌤️','نیمه‌ابری']:code<=48?['🌫️','مه‌آلود']:code<=67?['🌧️','بارانی']:code<=77?['❄️','برفی']:code<=82?['🌦️','رگبار']:['⛈️','طوفانی'];$('weatherIcon').textContent=info[0];$('weatherTemp').textContent=Math.round(c.temperature_2m)+'°';$('weatherText').textContent=info[1]}catch(e){$('weatherIcon').textContent='◌';$('weatherTemp').textContent='—';$('weatherText').textContent='آب‌وهوا در دسترس نیست'}}
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+db.auth.getSession().then(({data})=>{if(data.session)startApp(data.session.user)});
+})();
+</script>
+</body></html>
