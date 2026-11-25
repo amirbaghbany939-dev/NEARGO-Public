@@ -44,25 +44,21 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
   <div id="loginPanel">
    <h2>مسیرت رو از همین‌جا شروع کن</h2><p class="muted small">فضای تحصیلی اختصاصی تو؛ با برنامه‌ای که از اطلاعات خودت ساخته می‌شود.</p>
    <form id="loginForm" class="auth-form">
-    <div class="field"><label>ایمیل</label><input name="email" type="email" autocomplete="username" required placeholder="ایمیل حساب"></div>
+    <div class="field"><label>نام کاربری</label><input name="username" type="text" autocomplete="username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9._-]{3,24}" placeholder="مثلاً amir_1387"></div>
     <div class="field"><label>رمز عبور</label><input name="password" type="password" autocomplete="current-password" required placeholder="رمز عبور"></div>
     <button type="submit">ورود به NEARGO</button>
    </form>
-   <div class="auth-tabs"><button class="ghost" id="showSignup">ساخت حساب دانش‌آموز</button><button class="ghost" id="showReset">بازیابی رمز</button></div>
+   <div class="auth-tabs"><button class="ghost" id="showSignup">ساخت حساب دانش‌آموز</button></div>
   </div>
   <div id="signupPanel" class="hidden">
    <h2>ساخت حساب تحصیلی</h2><p class="muted small">اطلاعات تحصیلی را بعداً هم می‌توانی کامل کنی.</p>
    <form id="signupForm" class="auth-form">
     <div class="field"><label>نام و نام خانوادگی</label><input name="display_name" required maxlength="70"></div>
     <div class="field"><label>رشته</label><select name="track" required><option value="math">ریاضی و فیزیک</option><option value="experimental">علوم تجربی</option></select></div>
-    <div class="field"><label>ایمیل</label><input name="email" type="email" autocomplete="email" required></div>
+    <div class="field"><label>نام کاربری (۳ تا ۲۴ حرف انگلیسی یا عدد)</label><input name="username" type="text" autocomplete="username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9._-]{3,24}" placeholder="مثلاً kimiya_12"></div>
     <div class="field"><label>رمز عبور (حداقل ۸ نویسه)</label><input name="password" type="password" minlength="8" autocomplete="new-password" required></div>
     <button type="submit">ایجاد حساب</button><button type="button" class="ghost" id="backLogin">بازگشت به ورود</button>
    </form>
-  </div>
-  <div id="resetPanel" class="hidden">
-   <h2>بازیابی رمز عبور</h2><p class="muted small">لینک بازیابی به ایمیل حساب ارسال می‌شود.</p>
-   <form id="resetForm" class="auth-form"><div class="field"><label>ایمیل حساب</label><input name="email" type="email" required></div><button>ارسال لینک بازیابی</button><button type="button" class="ghost" id="backLogin2">بازگشت</button></form>
   </div>
   <p id="authMessage" class="small muted" aria-live="polite"></p>
   <div class="notice">اطلاعات هر حساب جداگانه و با دسترسی امن پایگاه داده نگهداری می‌شود. رمز عبور را با کسی به اشتراک نگذار.</div>
@@ -272,15 +268,16 @@ const num=(x)=>Number(x||0);
 const show=(id)=>$(id).classList.remove('hidden');
 const hide=(id)=>$(id).classList.add('hidden');
 function toast(s){$('toast').textContent=s;show('toast');clearTimeout(toast.timer);toast.timer=setTimeout(()=>hide('toast'),3300)}
-function friendlyError(e){const m=String(e?.message||e||'خطای نامشخص');if(m.includes('Invalid login'))return 'ایمیل یا رمز عبور درست نیست.';if(m.includes('Email not confirmed'))return 'ابتدا ایمیلت را تأیید کن.';if(m.includes('duplicate key'))return 'این مورد قبلاً ثبت شده است.';if(m.includes('row-level security'))return 'دسترسی این عملیات مجاز نیست؛ دوباره وارد شو.';return m.slice(0,180)}
-function setAuthPanel(which){['loginPanel','signupPanel','resetPanel'].forEach(id=>hide(id));show(which);$('authMessage').textContent=''}
+function friendlyError(e){const m=String(e?.message||e||'خطای نامشخص');if(m.includes('Invalid login'))return 'نام کاربری یا رمز عبور درست نیست.';if(m.includes('Email not confirmed'))return 'تأیید ایمیل هنوز در تنظیمات سامانه فعال است؛ باید برای ورود بدون ایمیل غیرفعال شود.';if(m.includes('already registered')||m.includes('already been registered'))return 'این نام کاربری قبلاً انتخاب شده است.';if(m.includes('duplicate key'))return 'این مورد قبلاً ثبت شده است.';if(m.includes('row-level security'))return 'دسترسی این عملیات مجاز نیست؛ دوباره وارد شو.';return m.slice(0,180)}
+function authEmail(username){const u=String(username||'').trim().toLowerCase();if(u.includes('@'))return u;return u+'@users.neargo.invalid'}
+function setAuthPanel(which){['loginPanel','signupPanel'].forEach(id=>hide(id));show(which);$('authMessage').textContent=''}
 function openAuth(panel){hide('landingView');show('authView');setAuthPanel(panel)}
 $('landingLogin').onclick=$('landingLoginHero').onclick=()=>openAuth('loginPanel');
 $('landingSignup').onclick=$('landingSignupHero').onclick=()=>openAuth('signupPanel');
-$('showSignup').onclick=()=>setAuthPanel('signupPanel');$('showReset').onclick=()=>setAuthPanel('resetPanel');$('backLogin').onclick=()=>setAuthPanel('loginPanel');$('backLogin2').onclick=()=>setAuthPanel('loginPanel');
-$('loginForm').onsubmit=async e=>{e.preventDefault();const f=e.target;$('authMessage').textContent='در حال ورود...';const {data,error}=await db.auth.signInWithPassword({email:val(f,'email'),password:val(f,'password')});if(error){$('authMessage').textContent=friendlyError(error);return}await startApp(data.user)};
-$('signupForm').onsubmit=async e=>{e.preventDefault();const f=e.target;$('authMessage').textContent='در حال ساخت حساب...';const {data,error}=await db.auth.signUp({email:val(f,'email'),password:val(f,'password'),options:{emailRedirectTo:location.origin+location.pathname,data:{display_name:val(f,'display_name'),track:val(f,'track')}}});if(error){$('authMessage').textContent=friendlyError(error);return}if(data.session&&data.user){await startApp(data.user)}else{$('authMessage').textContent='حساب ساخته شد. اگر تأیید ایمیل فعال است، صندوق ایمیلت را بررسی کن و سپس وارد شو.'}};
-$('resetForm').onsubmit=async e=>{e.preventDefault();const email=val(e.target,'email');const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});$('authMessage').textContent=error?friendlyError(error):'اگر این ایمیل ثبت شده باشد، لینک بازیابی برایش ارسال می‌شود.'};
+$('showSignup').onclick=()=>setAuthPanel('signupPanel');$('backLogin').onclick=()=>setAuthPanel('loginPanel');
+$('loginForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const username=val(f,'username').trim().toLowerCase();$('authMessage').textContent='در حال ورود...';const {data,error}=await db.auth.signInWithPassword({email:authEmail(username),password:val(f,'password')});if(error){$('authMessage').textContent=friendlyError(error);return}await startApp(data.user)};
+$('signupForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const username=val(f,'username').trim().toLowerCase();if(!/^[a-z0-9._-]{3,24}$/.test(username)){$('authMessage').textContent='نام کاربری باید ۳ تا ۲۴ نویسه و فقط شامل حروف انگلیسی، عدد، نقطه، خط تیره یا زیرخط باشد.';return}$('authMessage').textContent='در حال ساخت حساب...';const {data,error}=await db.auth.signUp({email:authEmail(username),password:val(f,'password'),options:{data:{username,display_name:val(f,'display_name'),track:val(f,'track')}}});if(error){$('authMessage').textContent=friendlyError(error);return}if(data.session&&data.user){await startApp(data.user)}else{$('authMessage').textContent='حساب ایجاد شد، اما ورود خودکار انجام نشد. تنظیم «تأیید ایمیل» در Supabase هنوز فعال است و باید خاموش شود.'}};
+
 $('logoutBtn').onclick=async()=>{if(state.channel)await db.removeChannel(state.channel);await db.auth.signOut();location.reload()};
 db.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){toast('اکنون می‌توانی رمز جدید را از فرایند بازیابی تنظیم کنی.')}});
 function switchTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.id==='tab-'+id));document.querySelectorAll('#mainNav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='mentor')renderMentor()}
