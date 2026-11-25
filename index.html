@@ -13,10 +13,29 @@
 @media(max-width:1000px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:205px 1fr}.two-col{grid-template-columns:1fr}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){.wrap{padding:13px}.layout{grid-template-columns:1fr}.sidebar{position:static;padding:8px}.nav{display:flex;overflow:auto;gap:5px}.nav button{white-space:nowrap;padding:9px 11px;font-size:11px}.side-note{display:none}.app-header{align-items:flex-start}.header-actions{flex-wrap:wrap;justify-content:flex-end}.header-actions .pill{display:none}.hero{min-height:170px;padding:20px}.hero h2{font-size:22px}.weather{min-width:95px;padding:9px}.weather-icon{font-size:28px}.weather strong{font-size:18px}.grid{gap:9px}.card{padding:13px}.metric{font-size:24px}.section-head{align-items:flex-start}.form-grid{grid-template-columns:1fr 1fr}.topic-row{grid-template-columns:1fr 1fr}.mobile-nav{display:none}}
 @media(max-width:440px){.wrap{padding:10px}.brand h1{font-size:17px}.logo{width:41px;height:41px}.header-actions{gap:6px}.header-actions button{padding:8px 10px;font-size:11px}.hero{display:block}.weather{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:15px}.weather-icon{font-size:25px}.weather strong{font-size:17px}.grid{grid-template-columns:1fr 1fr}.form-grid,.setup-grid{grid-template-columns:1fr}.form-grid .span2{grid-column:auto}.topic-row{grid-template-columns:1fr 1fr}.item{align-items:flex-start}.item-actions{flex-direction:column}.auth-card{padding:22px}}
+
+.landing-shell{min-height:100vh;padding:24px clamp(18px,5vw,72px);background:radial-gradient(ellipse at 78% 15%,#56327b55,transparent 34%),radial-gradient(ellipse at 5% 80%,#233b6155,transparent 35%),var(--bg)}
+.landing-header{max-width:1320px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:18px}
+.landing-actions{display:flex;gap:9px;flex-wrap:wrap}.landing-main{max-width:1320px;margin:42px auto 0}.landing-hero{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:28px;min-height:420px;padding:clamp(24px,5vw,60px);border:1px solid #72539b88;border-radius:32px;background:linear-gradient(120deg,#21182fef,#171326e8 58%,#1c1930ef);overflow:hidden;position:relative;box-shadow:var(--shadow)}
+.landing-copy{position:relative;z-index:2}.landing-copy h2{font-size:clamp(30px,4.5vw,58px);line-height:1.5;margin:20px 0 12px;font-weight:900}.landing-copy h2 em{font-style:normal;color:#c6a8ff}.landing-copy p{max-width:650px;color:#c4b7d4;line-height:2.2;font-size:15px}.landing-proof{display:flex;gap:9px;flex-wrap:wrap;margin-top:24px}.landing-proof span{font-size:11px;padding:7px 11px;border-radius:99px;background:#ffffff0b;border:1px solid #ffffff17;color:#d5c7e7}
+.landing-visual{height:330px;position:relative;display:grid;place-items:center}.orbit{position:absolute;border:1px solid #b99bff55;border-radius:50%;transform:rotate(-22deg)}.orbit-one{width:270px;height:270px;animation:orbitSpin 24s linear infinite}.orbit-two{width:210px;height:310px;transform:rotate(54deg);border-color:#78e1c455;animation:orbitSpin 30s linear infinite reverse}.orbit-core{width:138px;height:138px;border-radius:38px;display:grid;place-content:center;text-align:center;font-size:66px;font-weight:900;background:linear-gradient(145deg,#d4c1ff,#7045c4);box-shadow:0 0 90px #a47aff55;z-index:1}.orbit-core span{font-size:10px;letter-spacing:3px}.float-chip{position:absolute;padding:9px 13px;border-radius:12px;background:#211a32;border:1px solid #8f72b5;color:#eee4ff;font-size:12px;box-shadow:var(--shadow);animation:float 4s ease-in-out infinite}.chip-a{top:16%;right:4%}.chip-b{bottom:18%;right:0;animation-delay:-1s}.chip-c{bottom:12%;left:2%;animation-delay:-2s}@keyframes orbitSpin{to{rotate:360deg}}@keyframes float{50%{translate:0 -9px}}
+.landing-features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}.landing-features .card{background:#171326c9}.landing-features h3{margin:8px 0}.landing-features p{font-size:12px;line-height:2;color:var(--muted);margin:0}.feature-icon{font-size:25px;color:var(--mint)}.landing-foot{text-align:center;color:var(--muted);font-size:11px;margin:22px 0 6px}
+.planner-engine{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;background:linear-gradient(110deg,#211a34,#171326)}.planner-engine p{font-size:12px;color:var(--muted);margin:5px 0 0}.engine-actions{display:flex;gap:8px;flex-wrap:wrap}
+.timer-card{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:linear-gradient(120deg,#211a34,#171326);margin-bottom:14px}.timer-display{font-size:42px;font-weight:900;letter-spacing:2px;font-variant-numeric:tabular-nums;color:#d5bdff}.timer-controls{display:flex;gap:8px;flex-wrap:wrap}.timer-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.timer-status{font-size:11px;color:var(--muted);margin-top:5px}
+@media(max-width:760px){.landing-hero{grid-template-columns:1fr;padding:24px}.landing-visual{height:220px;order:-1}.landing-features{grid-template-columns:1fr}.landing-header{align-items:flex-start}.landing-actions{justify-content:flex-end}.landing-copy h2{font-size:34px}.timer-card{grid-template-columns:1fr}.timer-display{font-size:36px}.timer-fields{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
-<div id="authView" class="auth-shell">
+<div id="landingView" class="landing-shell">
+ <header class="landing-header"><div class="brand"><div class="logo">N</div><div><h1>NEARGO</h1><small>Closer to Your Goal.</small></div></div><div class="landing-actions"><button id="landingLogin" class="ghost">ورود</button><button id="landingSignup">شروع مسیر تحصیلی</button></div></header>
+ <main class="landing-main">
+  <section class="landing-hero"><div class="landing-copy"><span class="pill">فضای اختصاصی پایه دوازدهم</span><h2>مسیرت را دقیق‌تر ببین.<br><em>قدم بعدی را هوشمندانه بردار.</em></h2><p>NEARGO برنامه مدرسه، کلاس‌ها، هدف‌های درسی، نقاط ضعف و گزارش مطالعه‌ات را کنار هم می‌گذارد تا یک مسیر قابل اجرا داشته باشی؛ نه یک فهرست شلوغ و غیرواقعی.</p><div class="landing-actions"><button id="landingSignupHero">ساخت فضای تحصیلی من</button><button id="landingLoginHero" class="ghost">قبلاً حساب ساخته‌ام</button></div><div class="landing-proof"><span>پایه دوازدهم</span><span>ریاضی و فیزیک</span><span>علوم تجربی</span><span>همگام‌سازی آنلاین</span></div></div><div class="landing-visual"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit-core">N<span>NEARGO</span></div><div class="float-chip chip-a">برنامه روزانه</div><div class="float-chip chip-b">تحلیل پیشرفت</div><div class="float-chip chip-c">نقاط ضعف</div></div></section>
+  <section class="landing-features"><article class="card"><span class="feature-icon">▦</span><h3>برنامه‌ریز پویا</h3><p>زمان مدرسه و کلاس‌ها را لحاظ کن و برنامه هفتگی قابل ویرایش بساز.</p></article><article class="card"><span class="feature-icon">◎</span><h3>شناخت نقاط ضعف</h3><p>مباحث دشوار را ثبت کن تا پیشنهادهای مطالعه روی آن‌ها متمرکز شوند.</p></article><article class="card"><span class="feature-icon">◷</span><h3>ثبت و تحلیل مطالعه</h3><p>زمان واقعی مطالعه، آزمون‌ها و روند پیشرفتت را در یک داشبورد دنبال کن.</p></article></section>
+  <p class="landing-foot">حساب هر دانش‌آموز جداست؛ اطلاعات فقط در فضای حساب خودش نگهداری می‌شود.</p>
+ </main>
+</div>
+<div id="authView" class="auth-shell hidden">
  <div class="auth-card">
   <div class="brand"><div class="logo">N</div><div><h1>NEARGO</h1><small>Closer to Your Goal.</small></div></div>
   <div id="loginPanel">
@@ -104,6 +123,8 @@
 
    <section id="tab-planner" class="tab">
     <div class="section-head"><h3>برنامه‌ریز روزانه</h3><span class="pill">برنامه قابل ویرایش</span></div>
+    <div class="card planner-engine"><div><b>ساخت برنامه هوشمند هفت‌روزه</b><p id="plannerEngineStatus">با توجه به ساعت آزاد، برنامه ثابت و نقاط ضعف تو، زمان‌های خالی را پیدا می‌کنم. برنامه‌های دستی حذف نمی‌شوند.</p></div><div class="engine-actions"><button type="button" id="generatePlanBtn">ساخت برنامه پیشنهادی</button><button type="button" id="clearGeneratedBtn" class="ghost tiny">حذف برنامه‌های پیشنهادی</button></div></div>
+
     <div class="card form-card"><form id="taskForm" class="form-grid">
      <div class="field span2"><label>عنوان فعالیت</label><input name="title" required maxlength="120" placeholder="مثلاً آموزش مبحث مشتق"></div>
      <div class="field"><label>درس</label><input name="subject" list="subjectOptions" placeholder="نام درس"><datalist id="subjectOptions"></datalist></div>
@@ -150,6 +171,8 @@
 
    <section id="tab-study" class="tab">
     <div class="section-head"><h3>ثبت گزارش مطالعه</h3><span class="small muted">زمان واقعی مطالعه را ثبت کن</span></div>
+    <div class="card timer-card"><div><span class="tag">ثبت خودکار زمان مطالعه</span><div class="timer-display" id="timerDisplay">00:00:00</div><div class="timer-status" id="timerStatus">درس را انتخاب کن و شروع بزن؛ زمان نهایی به سوابق مطالعه اضافه می‌شود.</div><div class="timer-fields"><div class="field"><label>درس</label><input id="timerSubject" list="subjectOptions" placeholder="مثلاً حسابان"></div><div class="field"><label>مبحث</label><input id="timerTopic" placeholder="اختیاری"></div></div></div><div class="timer-controls"><button type="button" id="timerStart">شروع</button><button type="button" id="timerPause" class="ghost" disabled>مکث</button><button type="button" id="timerFinish" class="ghost" disabled>پایان و ثبت</button></div></div>
+
     <div class="card form-card"><form id="logForm" class="form-grid">
      <div class="field"><label>درس</label><input name="subject" list="subjectOptions" required></div>
      <div class="field"><label>مدت (دقیقه)</label><input name="studied_minutes" type="number" min="1" max="1440" required></div>
@@ -236,6 +259,7 @@ const SUPABASE_KEY='sb_publishable_L2bTPoqiSnwc5fjb-LahfA_x7BfzacS';
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
 const state={user:null,profile:null,prefs:null,tasks:[],logs:[],exams:[],results:[],resources:[],schedule:[],topics:[],editingTask:null,channel:null};
+let timerSeconds=0,timerInterval=null,timerRunning=false;
 const days=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
 const faDate=d=>new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric',month:'long',year:'numeric'}).format(d);
 const isoToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
@@ -247,6 +271,9 @@ const hide=(id)=>$(id).classList.add('hidden');
 function toast(s){$('toast').textContent=s;show('toast');clearTimeout(toast.timer);toast.timer=setTimeout(()=>hide('toast'),3300)}
 function friendlyError(e){const m=String(e?.message||e||'خطای نامشخص');if(m.includes('Invalid login'))return 'ایمیل یا رمز عبور درست نیست.';if(m.includes('Email not confirmed'))return 'ابتدا ایمیلت را تأیید کن.';if(m.includes('duplicate key'))return 'این مورد قبلاً ثبت شده است.';if(m.includes('row-level security'))return 'دسترسی این عملیات مجاز نیست؛ دوباره وارد شو.';return m.slice(0,180)}
 function setAuthPanel(which){['loginPanel','signupPanel','resetPanel'].forEach(id=>hide(id));show(which);$('authMessage').textContent=''}
+function openAuth(panel){hide('landingView');show('authView');setAuthPanel(panel)}
+$('landingLogin').onclick=$('landingLoginHero').onclick=()=>openAuth('loginPanel');
+$('landingSignup').onclick=$('landingSignupHero').onclick=()=>openAuth('signupPanel');
 $('showSignup').onclick=()=>setAuthPanel('signupPanel');$('showReset').onclick=()=>setAuthPanel('resetPanel');$('backLogin').onclick=()=>setAuthPanel('loginPanel');$('backLogin2').onclick=()=>setAuthPanel('loginPanel');
 $('loginForm').onsubmit=async e=>{e.preventDefault();const f=e.target;$('authMessage').textContent='در حال ورود...';const {data,error}=await db.auth.signInWithPassword({email:val(f,'email'),password:val(f,'password')});if(error){$('authMessage').textContent=friendlyError(error);return}await startApp(data.user)};
 $('signupForm').onsubmit=async e=>{e.preventDefault();const f=e.target;$('authMessage').textContent='در حال ساخت حساب...';const {data,error}=await db.auth.signUp({email:val(f,'email'),password:val(f,'password'),options:{data:{display_name:val(f,'display_name'),track:val(f,'track')}}});if(error){$('authMessage').textContent=friendlyError(error);return}if(data.session&&data.user){await startApp(data.user)}else{$('authMessage').textContent='حساب ساخته شد. اگر تأیید ایمیل فعال است، صندوق ایمیلت را بررسی کن و سپس وارد شو.'}};
@@ -256,7 +283,7 @@ db.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){toas
 function switchTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.id==='tab-'+id));document.querySelectorAll('#mainNav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='mentor')renderMentor()}
 document.querySelectorAll('#mainNav button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>switchTab(b.dataset.open));
-async function startApp(user){state.user=user;hide('authView');show('appView');$('userPill').textContent=user.email;$('accountEmail').textContent='ایمیل حساب: '+user.email;try{await loadAll();if(!state.profile||!state.profile.onboarding_completed){hide('appView');show('onboardingView');fillOnboarding()}else{renderAll();setupRealtime();updateWeather();}}catch(e){toast('بارگذاری اطلاعات: '+friendlyError(e))}}
+async function startApp(user){state.user=user;hide('landingView');hide('authView');show('appView');$('userPill').textContent=user.email;$('accountEmail').textContent='ایمیل حساب: '+user.email;try{await loadAll();if(!state.profile||!state.profile.onboarding_completed){hide('appView');show('onboardingView');fillOnboarding()}else{renderAll();setupRealtime();updateWeather();}}catch(e){toast('بارگذاری اطلاعات: '+friendlyError(e))}}
 async function loadAll(){const uid=state.user.id;const [p,prefs,tasks,logs,exams,resources,schedule,topics]=await Promise.all([
  db.from('student_profiles').select('*').eq('user_id',uid).maybeSingle(),
  db.from('student_preferences').select('*').eq('user_id',uid).maybeSingle(),
@@ -282,6 +309,59 @@ function renderAll(){const p=state.profile||{};const isMath=p.track==='math';$('
 function renderTaskList(id,items){const sorted=[...items].sort((a,b)=>(a.starts_at||'').localeCompare(b.starts_at||''));$(id).innerHTML=sorted.length?sorted.map(x=>'<div class="item"><div class="item-main"><div class="item-title">'+esc(x.title)+'</div><div class="item-meta">'+esc(x.subject||'بدون درس')+' · '+(x.starts_at||'بدون ساعت')+' · '+x.duration_minutes+' دقیقه</div></div><div class="item-actions"><span class="tag '+(x.status==='done'?'done':x.priority==='high'?'high':'')+'">'+(x.status==='done'?'انجام‌شده':x.priority==='high'?'اولویت بالا':'در انتظار')+'</span><button class="ghost tiny" data-task-toggle="'+x.id+'">'+(x.status==='done'?'بازگردانی':'انجام شد')+'</button></div></div>').join(''):'<div class="empty">برای امروز هنوز فعالیتی ثبت نشده است.</div>';$(id).querySelectorAll('[data-task-toggle]').forEach(b=>b.onclick=()=>toggleTask(b.dataset.taskToggle))}
 function renderPlanner(){const date=$('plannerDate').value||isoToday();const items=state.tasks.filter(x=>x.task_date===date);renderTaskList('plannerList',items);$('plannerList').querySelectorAll('.item').forEach((el,i)=>{const x=items[i];const actions=el.querySelector('.item-actions');actions.insertAdjacentHTML('beforeend','<button class="ghost tiny" data-edit="'+x.id+'">ویرایش</button><button class="danger-btn tiny" data-delete="'+x.id+'">حذف</button>')});$('plannerList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editTask(b.dataset.edit));$('plannerList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteTask(b.dataset.delete))}
 async function refreshData(){await loadAll();renderAll()}
+
+function timeToMin(t){if(!t)return 0;const a=String(t).slice(0,5).split(':').map(Number);return a[0]*60+a[1]}
+function minToTime(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
+function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function buildPlanRows(){
+ const profile=state.profile||{},hours=Math.max(1,Math.min(8,Math.floor(num(profile.daily_available_hours)||3)));
+ const wake=timeToMin(profile.wake_time||'07:00'),sleep=timeToMin(profile.sleep_time||'23:00');
+ const weak=[...state.topics].sort((a,b)=>(a.confidence-b.confidence)||((b.priority==='high')-(a.priority==='high')));
+ const fallback=profile.track==='experimental'?['زیست‌شناسی','شیمی','فیزیک','ریاضی']:['حسابان','فیزیک','شیمی','هندسه','گسسته'];
+ const queue=weak.length?weak.map(x=>({subject:x.subject,topic:x.topic,confidence:x.confidence,priority:x.priority})):fallback.map(subject=>({subject,topic:'مرور و تمرین',confidence:3,priority:'normal'}));
+ const rows=[],now=new Date(),today=dateKey(now);
+ for(let day=0;day<7;day++){
+  const date=new Date(now.getFullYear(),now.getMonth(),now.getDate()+day,12);
+  const key=dateKey(date),weekday=date.getDay();
+  let cursor=Math.max(15*60,wake+60,day===0?now.getHours()*60+now.getMinutes()+10:0);
+  const end=Math.min(22*60,sleep-30);
+  const blocks=[
+   ...state.schedule.filter(x=>x.weekday===weekday).map(x=>({start:timeToMin(x.starts_at),end:timeToMin(x.ends_at)})),
+   ...state.tasks.filter(x=>x.task_date===key&&!String(x.notes||'').startsWith('[NEARGO-AUTO]')).map(x=>({start:timeToMin(x.starts_at),end:timeToMin(x.starts_at)+num(x.duration_minutes)}))
+  ].filter(x=>x.end>x.start).sort((a,b)=>a.start-b.start);
+  let made=0,guard=0;
+  while(made<hours&&cursor+50<=end&&guard++<100){
+   let hit=blocks.find(b=>cursor<b.end&&cursor+50>b.start);
+   if(hit){cursor=hit.end+10;continue}
+   const pick=queue[(day*hours+made)%queue.length];
+   rows.push({title:pick.topic==='مرور و تمرین'?'مطالعه و تمرین '+pick.subject:pick.subject+' — '+pick.topic,subject:pick.subject,task_date:key,starts_at:minToTime(cursor),duration_minutes:50,task_type:'study',priority:pick.confidence<=2||pick.priority==='high'?'high':'normal',notes:'[NEARGO-AUTO] برنامه پیشنهادی بر اساس نقاط ضعف و زمان آزاد.'});
+   blocks.push({start:cursor,end:cursor+50});blocks.sort((a,b)=>a.start-b.start);made++;cursor+=60;
+  }
+ }
+ return rows;
+}
+$('generatePlanBtn').onclick=async()=>{
+ if(!state.profile){toast('ابتدا پروفایل تحصیلی را کامل کن.');return}
+ if(!state.schedule.length&&!confirm('هنوز مدرسه و کلاس‌ها را در برنامه ثابت وارد نکرده‌ای. برنامه پیشنهادی با شروع عصر ساخته می‌شود و ممکن است با تعهدات ثبت‌نشده تداخل داشته باشد. ادامه می‌دهی؟'))return;
+ const old=state.tasks.filter(x=>String(x.notes||'').startsWith('[NEARGO-AUTO]'));
+ if(old.length&&!confirm('برنامه پیشنهادی قبلی جایگزین شود؟ برنامه‌های دستی باقی می‌مانند.'))return;
+ $('generatePlanBtn').disabled=true;$('plannerEngineStatus').textContent='در حال ساخت برنامه و بررسی زمان‌های آزاد...';
+ try{
+  if(old.length){const del=await db.from('study_tasks').delete().like('notes','[NEARGO-AUTO]%');if(del.error)throw del.error}
+  const rows=buildPlanRows();
+  if(!rows.length){$('plannerEngineStatus').textContent='در این بازه زمان آزاد کافی پیدا نشد. ساعت خواب یا برنامه ثابت را بررسی کن.';return}
+  const {error}=await db.from('study_tasks').insert(rows);if(error)throw error;
+  await refreshData();$('plannerEngineStatus').textContent=rows.length+' فعالیت پیشنهادی برای ۷ روز ساخته شد. می‌توانی هر مورد را ویرایش یا حذف کنی.';toast('برنامه هفت‌روزه ساخته شد.');
+ }catch(e){$('plannerEngineStatus').textContent='ساخت برنامه انجام نشد: '+friendlyError(e);toast(friendlyError(e))}
+ finally{$('generatePlanBtn').disabled=false}
+};
+$('clearGeneratedBtn').onclick=async()=>{
+ if(!confirm('فقط فعالیت‌هایی که NEARGO ساخته حذف شوند؟ برنامه‌های دستی باقی می‌مانند.'))return;
+ const {error}=await db.from('study_tasks').delete().like('notes','[NEARGO-AUTO]%');
+ if(error){toast(friendlyError(error));return}
+ await refreshData();$('plannerEngineStatus').textContent='برنامه‌های پیشنهادی حذف شدند؛ برنامه‌های دستی دست‌نخورده ماندند.';
+};
+
 $('plannerDate').value=isoToday();$('plannerDate').onchange=renderPlanner;
 function resetTaskForm(){state.editingTask=null;$('taskForm').reset();$('taskForm').elements.task_date.value=$('plannerDate').value||isoToday();$('taskSubmit').textContent='افزودن به برنامه';hide('cancelTaskEdit')}
 function editTask(id){const x=state.tasks.find(t=>t.id===id);if(!x)return;state.editingTask=id;const f=$('taskForm');for(const k of ['title','subject','task_date','starts_at','duration_minutes','task_type','priority','notes'])if(f.elements[k])f.elements[k].value=x[k]??'';$('taskSubmit').textContent='ذخیره تغییرات';show('cancelTaskEdit');switchTab('planner');window.scrollTo({top:0,behavior:'smooth'})}
@@ -293,6 +373,28 @@ $('scheduleForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const r
 function renderSchedule(){const daysFa=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];$('weeklySchedule').innerHTML=daysFa.map((d,i)=>{const items=state.schedule.filter(x=>x.weekday===i);return '<div class="day-col"><h4>'+d+'</h4>'+(items.length?items.map(x=>'<div class="schedule-chip"><b>'+esc(x.title)+'</b><br>'+x.starts_at.slice(0,5)+'–'+x.ends_at.slice(0,5)+'</div>').join(''):'<span class="small muted">—</span>')+'</div>'}).join('');$('scheduleList').innerHTML=state.schedule.length?state.schedule.map(x=>'<div class="item"><div class="item-main"><b>'+esc(x.title)+'</b><div class="item-meta">'+daysFa[x.weekday]+' · '+x.starts_at.slice(0,5)+' تا '+x.ends_at.slice(0,5)+' · '+(x.schedule_type==='school'?'مدرسه':x.schedule_type==='class'?'کلاس':'فعالیت ثابت')+'</div></div><button class="danger-btn tiny" data-schedule-delete="'+x.id+'">حذف</button></div>').join(''):'<div class="empty">هنوز برنامه ثابتی ثبت نشده است.</div>';$('scheduleList').querySelectorAll('[data-schedule-delete]').forEach(b=>b.onclick=async()=>{if(!confirm('حذف شود؟'))return;const {error}=await db.from('student_schedule').delete().eq('id',b.dataset.scheduleDelete);if(error)toast(friendlyError(error));else refreshData()})}
 $('topicForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={subject:val(f,'subject'),topic:val(f,'topic'),confidence:num(val(f,'confidence')),priority:val(f,'priority'),notes:val(f,'notes')||null};const {error}=await db.from('student_topics').upsert(row,{onConflict:'user_id,subject,topic'});if(error){toast(friendlyError(error));return}f.reset();await refreshData();toast('مبحث ذخیره شد.')};
 function renderTopics(){$('topicsList').innerHTML=state.topics.length?state.topics.map(x=>'<div class="item"><div class="item-main"><div class="item-title">'+esc(x.subject)+' — '+esc(x.topic)+'</div><div class="item-meta">'+esc(x.notes||'بدون توضیح')+' · <span class="stars">'+('★'.repeat(x.confidence))+('☆'.repeat(5-x.confidence))+'</span></div></div><div class="item-actions"><span class="tag '+(x.confidence<=2||x.priority==='high'?'high':'')+'">'+(x.confidence<=2?'نیازمند تمرکز':x.priority==='high'?'اولویت بالا':'در حال یادگیری')+'</span><button class="danger-btn tiny" data-topic-delete="'+x.id+'">حذف</button></div></div>').join(''):'<div class="empty">هنوز مبحثی ثبت نکرده‌ای. هرچه خودارزیابی دقیق‌تر باشد، پیشنهادها بهتر می‌شوند.</div>';$('topicsList').querySelectorAll('[data-topic-delete]').forEach(b=>b.onclick=async()=>{const {error}=await db.from('student_topics').delete().eq('id',b.dataset.topicDelete);if(error)toast(friendlyError(error));else refreshData()});const subjects=[...new Set(state.topics.map(x=>x.subject).concat(state.tasks.map(x=>x.subject).filter(Boolean)))];$('subjectOptions').innerHTML=subjects.map(s=>'<option value="'+esc(s)+'"></option>').join('')}
+
+function renderTimer(){const h=String(Math.floor(timerSeconds/3600)).padStart(2,'0'),m=String(Math.floor(timerSeconds%3600/60)).padStart(2,'0'),s=String(timerSeconds%60).padStart(2,'0');$('timerDisplay').textContent=h+':'+m+':'+s}
+function stopTimerInterval(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}}
+$('timerStart').onclick=()=>{
+ if(timerRunning)return;
+ if(!timerSeconds&&!$('timerSubject').value.trim()){toast('نام درس را وارد کن.');$('timerSubject').focus();return}
+ timerRunning=true;$('timerStart').disabled=true;$('timerPause').disabled=false;$('timerFinish').disabled=false;$('timerPause').textContent='مکث';$('timerStatus').textContent='زمان مطالعه در حال ثبت است.';
+ timerInterval=setInterval(()=>{timerSeconds++;renderTimer()},1000);
+};
+$('timerPause').onclick=()=>{
+ if(timerRunning){timerRunning=false;stopTimerInterval();$('timerPause').textContent='ادامه';$('timerStart').disabled=false;$('timerStatus').textContent='زمان‌سنج مکث کرده است.'}
+ else if(timerSeconds>0){timerRunning=true;$('timerStart').disabled=true;$('timerPause').textContent='مکث';$('timerStatus').textContent='زمان مطالعه ادامه دارد.';timerInterval=setInterval(()=>{timerSeconds++;renderTimer()},1000)}
+};
+$('timerFinish').onclick=async()=>{
+ if(!timerSeconds){toast('هنوز زمانی ثبت نشده است.');return}
+ stopTimerInterval();timerRunning=false;
+ const minutes=Math.max(1,Math.round(timerSeconds/60));
+ const {error}=await db.from('study_logs').insert({subject:$('timerSubject').value.trim(),studied_minutes:minutes,studied_on:isoToday(),description:$('timerTopic').value.trim()||'ثبت‌شده با زمان‌سنج NEARGO'});
+ if(error){toast(friendlyError(error));return}
+ timerSeconds=0;renderTimer();$('timerStart').disabled=false;$('timerPause').disabled=true;$('timerFinish').disabled=true;$('timerPause').textContent='مکث';$('timerStatus').textContent='زمان مطالعه با موفقیت در سوابق ثبت شد.';await refreshData();toast(minutes+' دقیقه مطالعه ثبت شد.');
+};
+
 $('logForm').elements.studied_on.value=isoToday();
 $('logForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={subject:val(f,'subject'),studied_minutes:num(val(f,'studied_minutes')),studied_on:val(f,'studied_on'),description:val(f,'description')||null};const {error}=await db.from('study_logs').insert(row);if(error){toast(friendlyError(error));return}f.reset();f.elements.studied_on.value=isoToday();await refreshData();toast('گزارش مطالعه ثبت شد.')};
 function renderLogs(){$('logsList').innerHTML=state.logs.length?state.logs.slice(0,70).map(x=>'<div class="item"><div class="item-main"><b>'+esc(x.subject)+'</b><div class="item-meta">'+x.studied_on+' · '+esc(x.description||'')+'</div></div><span class="pill">'+x.studied_minutes+' دقیقه</span></div>').join(''):'<div class="empty">گزارشی ثبت نشده است.</div>'}
