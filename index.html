@@ -18,6 +18,16 @@
 .setup-day-row.active{border-color:#9b78ff88;background:#9b78ff12}
 .setup-day-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
 .setup-day-fields .field{min-width:0}
+.planner-week{display:grid;gap:10px}
+.planner-day{padding:13px;border:1px solid #ffffff16;border-radius:15px;background:#ffffff05}
+.planner-day-head{font-weight:800;font-size:13px;margin-bottom:9px}
+.planner-event{display:grid;grid-template-columns:76px 1fr auto;gap:9px;align-items:center;padding:10px 0;border-top:1px solid #ffffff10}
+.planner-event-time{font-size:12px;font-weight:800;direction:ltr;text-align:center;color:#c8b4ff;font-variant-numeric:tabular-nums}
+.planner-event-title{font-size:13px;font-weight:700}
+.planner-event-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.planner-event .tiny{padding:6px 10px}
+.planner-empty{font-size:12px;color:var(--muted);padding:8px 0}
+@media(max-width:440px){.planner-event{grid-template-columns:62px 1fr auto;gap:6px}.planner-event-time{font-size:11px}.planner-event-title{font-size:12px}}
 .setup-inline-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:14px;border:1px solid #ffffff18;border-radius:14px;margin:14px 0}
 .setup-actions{display:flex;justify-content:space-between;gap:10px;margin-top:22px}
 .setup-actions button{min-width:112px}
@@ -239,7 +249,7 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
     <div class="section-head"><h3>برنامه‌ریز روزانه</h3><span class="pill">برنامه قابل ویرایش</span></div>
     <div class="card planner-engine"><div><b>ساخت برنامه هوشمند هفت‌روزه</b><p id="plannerEngineStatus">با توجه به ساعت آزاد، برنامه ثابت و نقاط ضعف تو، زمان‌های خالی را پیدا می‌کنم. برنامه‌های دستی حذف نمی‌شوند.</p></div><div class="engine-actions"><button type="button" id="generatePlanBtn">ساخت برنامه پیشنهادی</button><button type="button" id="clearGeneratedBtn" class="ghost tiny">حذف برنامه‌های پیشنهادی</button></div></div>
 
-    <div class="card form-card"><form id="taskForm" class="form-grid">
+    <div class="card form-card hidden" id="taskEditorCard"><form id="taskForm" class="form-grid">
      <div class="field span2"><label>عنوان فعالیت</label><input name="title" required maxlength="120" placeholder="مثلاً آموزش مبحث مشتق"></div>
      <div class="field"><label>درس</label><input name="subject" list="subjectOptions" placeholder="نام درس"><datalist id="subjectOptions"></datalist></div>
      <div class="field"><label>تاریخ</label><input name="task_date" type="date" required></div>
@@ -250,8 +260,8 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
      <div class="field"><label>توضیحات</label><input name="notes" placeholder="مبحث یا جزئیات"></div>
      <div class="field form-actions"><button id="taskSubmit">افزودن به برنامه</button><button type="button" id="cancelTaskEdit" class="ghost hidden">لغو ویرایش</button></div>
     </form></div>
-    <div class="section-head"><h3>فعالیت‌های تاریخ انتخاب‌شده</h3><input id="plannerDate" type="date" style="max-width:190px"></div>
-    <div id="plannerList" class="list"></div>
+    <div class="section-head"><h3>برنامه ۷ روز آینده</h3><span class="small muted">تاریخ و ساعت دقیق</span></div>
+    <div id="plannerWeek" class="planner-week"></div>
    </section>
 
    <section id="tab-schedule" class="tab">
@@ -506,7 +516,16 @@ function renderAll(){const p=state.profile||{};const isMath=p.track==='math';$('
  renderTaskList('todayTaskList',today);renderPlanner();renderSchedule();renderTopics();renderLogs();renderExams();renderResources();renderSettings();renderChart();renderMentor();
 }
 function renderTaskList(id,items){const sorted=[...items].sort((a,b)=>(a.starts_at||'').localeCompare(b.starts_at||''));$(id).innerHTML=sorted.length?sorted.map(x=>'<div class="item"><div class="item-main"><div class="item-title">'+esc(x.title)+'</div><div class="item-meta">'+esc(x.subject||'بدون درس')+' · '+(x.starts_at||'بدون ساعت')+' · '+x.duration_minutes+' دقیقه</div></div><div class="item-actions"><span class="tag '+(x.status==='done'?'done':x.priority==='high'?'high':'')+'">'+(x.status==='done'?'انجام‌شده':x.priority==='high'?'اولویت بالا':'در انتظار')+'</span><button class="ghost tiny" data-task-toggle="'+x.id+'">'+(x.status==='done'?'بازگردانی':'انجام شد')+'</button></div></div>').join(''):'<div class="empty">برای امروز هنوز فعالیتی ثبت نشده است.</div>';$(id).querySelectorAll('[data-task-toggle]').forEach(b=>b.onclick=()=>toggleTask(b.dataset.taskToggle))}
-function renderPlanner(){const date=$('plannerDate').value||isoToday();const items=state.tasks.filter(x=>x.task_date===date);renderTaskList('plannerList',items);$('plannerList').querySelectorAll('.item').forEach((el,i)=>{const x=items[i];const actions=el.querySelector('.item-actions');actions.insertAdjacentHTML('beforeend','<button class="ghost tiny" data-edit="'+x.id+'">ویرایش</button><button class="danger-btn tiny" data-delete="'+x.id+'">حذف</button>')});$('plannerList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editTask(b.dataset.edit));$('plannerList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteTask(b.dataset.delete))}
+function renderPlanner(){
+ const host=$('plannerWeek');if(!host)return;const now=new Date(),fa=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+ host.innerHTML=Array.from({length:7},(_,i)=>{const date=new Date(now.getFullYear(),now.getMonth(),now.getDate()+i,12),key=dateKey(date),weekday=date.getDay(),events=[];
+  state.tasks.filter(x=>x.task_date===key).forEach(x=>events.push({id:x.id,title:x.title,subject:x.subject,start:x.starts_at||'--:--',end:x.starts_at?minToTime(timeToMin(x.starts_at)+num(x.duration_minutes)):'',kind:'task',duration:x.duration_minutes}));
+  state.schedule.filter(x=>{const tag=String(x.notes||'').match(/\\[NEARGO-DATE:(\\d{4}-\\d{2}-\\d{2})\\]/);return tag?tag[1]===key:x.schedule_type==='school'?x.weekday===weekday:x.schedule_type==='class'&&x.weekday===weekday}).forEach(x=>events.push({title:x.title,subject:x.schedule_type==='school'?'مدرسه':'کلاس ثابت',start:x.starts_at,end:x.ends_at,kind:'fixed'}));
+  events.sort((a,b)=>a.start.localeCompare(b.start));
+  return '<div class="planner-day"><div class="planner-day-head">'+fa[weekday]+' · '+date.toLocaleDateString('fa-IR',{year:'numeric',month:'long',day:'numeric'})+'</div>'+(events.length?events.map(x=>'<div class="planner-event"><div class="planner-event-time">'+x.start+(x.end?' تا '+x.end:'')+'</div><div><div class="planner-event-title">'+esc(x.title)+'</div><div class="planner-event-meta">'+esc(x.subject||'فعالیت')+(x.duration?' · '+x.duration+' دقیقه':'')+(x.kind==='fixed'?' · ثابت':'')+'</div></div>'+(x.kind==='task'?'<button class="ghost tiny" data-edit="'+x.id+'">ویرایش</button>':'<span class="small muted">ثابت</span>')+'</div>').join(''):'<div class="planner-empty">فعالیتی ثبت نشده</div>')+'</div>';
+ }).join('');
+ host.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editTask(b.dataset.edit));
+}
 async function refreshData(){await loadAll();renderAll()}
 
 function timeToMin(t){if(!t)return 0;const a=String(t).slice(0,5).split(':').map(Number);return a[0]*60+a[1]}
@@ -565,10 +584,10 @@ $('clearGeneratedBtn').onclick=async()=>{
  await refreshData();$('plannerEngineStatus').textContent='برنامه‌های پیشنهادی حذف شدند؛ برنامه‌های دستی دست‌نخورده ماندند.';
 };
 
-$('plannerDate').value=isoToday();$('plannerDate').onchange=renderPlanner;
-function resetTaskForm(){state.editingTask=null;$('taskForm').reset();$('taskForm').elements.task_date.value=$('plannerDate').value||isoToday();$('taskSubmit').textContent='افزودن به برنامه';hide('cancelTaskEdit')}
-function editTask(id){const x=state.tasks.find(t=>t.id===id);if(!x)return;state.editingTask=id;const f=$('taskForm');for(const k of ['title','subject','task_date','starts_at','duration_minutes','task_type','priority','notes'])if(f.elements[k])f.elements[k].value=x[k]??'';$('taskSubmit').textContent='ذخیره تغییرات';show('cancelTaskEdit');switchTab('planner');window.scrollTo({top:0,behavior:'smooth'})}
+function resetTaskForm(){state.editingTask=null;$('taskForm').reset();$('taskForm').elements.task_date.value=isoToday();$('taskSubmit').textContent='ذخیره تغییرات';hide('cancelTaskEdit');hide('taskEditorCard')}
+function editTask(id){const x=state.tasks.find(t=>t.id===id);if(!x)return;state.editingTask=id;const f=$('taskForm');for(const k of ['title','subject','task_date','starts_at','duration_minutes','task_type','priority','notes'])if(f.elements[k])f.elements[k].value=x[k]??'';$('taskSubmit').textContent='ذخیره تغییرات';show('cancelTaskEdit');show('taskEditorCard');switchTab('planner');$('taskEditorCard').scrollIntoView({behavior:'smooth',block:'start'})}
 $('cancelTaskEdit').onclick=resetTaskForm;
+resetTaskForm();
 $('taskForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const row={title:val(f,'title'),subject:val(f,'subject')||null,task_date:val(f,'task_date'),starts_at:val(f,'starts_at')||null,duration_minutes:num(val(f,'duration_minutes')),task_type:val(f,'task_type'),priority:val(f,'priority'),notes:val(f,'notes')||null};let r=state.editingTask?await db.from('study_tasks').update(row).eq('id',state.editingTask):await db.from('study_tasks').insert(row);if(r.error){toast(friendlyError(r.error));return}toast(state.editingTask?'برنامه ویرایش شد.':'به برنامه اضافه شد.');resetTaskForm();await refreshData()};
 async function toggleTask(id){const x=state.tasks.find(t=>t.id===id);if(!x)return;const status=x.status==='done'?'planned':'done';const {error}=await db.from('study_tasks').update({status,completed_at:status==='done'?new Date().toISOString():null}).eq('id',id);if(error){toast(friendlyError(error));return}await refreshData()}
 async function deleteTask(id){if(!confirm('این فعالیت حذف شود؟'))return;const {error}=await db.from('study_tasks').delete().eq('id',id);if(error){toast(friendlyError(error));return}await refreshData();toast('فعالیت حذف شد.')}
