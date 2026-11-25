@@ -27,6 +27,40 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
 .timer-card{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:linear-gradient(120deg,#211a34,#171326);margin-bottom:14px}.timer-display{font-size:42px;font-weight:900;letter-spacing:2px;font-variant-numeric:tabular-nums;color:#d5bdff}.timer-controls{display:flex;gap:8px;flex-wrap:wrap}.timer-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.timer-status{font-size:11px;color:var(--muted);margin-top:5px}
 @media(max-width:760px){.landing-hero{grid-template-columns:1fr;padding:24px}.landing-visual{height:220px;order:-1}.landing-features{grid-template-columns:1fr}.landing-header{align-items:flex-start}.landing-actions{justify-content:flex-end}.landing-copy h2{font-size:34px}.timer-card{grid-template-columns:1fr}.timer-display{font-size:36px}.timer-fields{grid-template-columns:1fr}}
 
+
+/* NEARGO authentication refresh */
+.auth-shell{min-height:100vh;padding:clamp(12px,3vw,38px);display:grid;place-items:center;background:radial-gradient(ellipse at 10% 15%,#52357955,transparent 36%),radial-gradient(ellipse at 90% 90%,#1c657055,transparent 35%),#090812}
+.auth-layout{width:min(1100px,100%);min-height:650px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border:1px solid #59446f;border-radius:30px;background:#151122;box-shadow:0 30px 100px #0009}
+.auth-story{position:relative;overflow:hidden;padding:clamp(26px,4vw,52px);display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(145deg,#30204b,#171629 72%,#142b35)}
+.auth-story:before,.auth-story:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.auth-story:before{width:390px;height:390px;border:1px solid #c4a1ff22;left:-170px;top:-150px}
+.auth-story:after{width:280px;height:280px;border:1px solid #8de6d322;right:-140px;bottom:-120px}
+.auth-story .brand,.auth-story-title,.auth-story-copy,.auth-tags{position:relative;z-index:2}
+.auth-story-title{font-size:clamp(25px,3vw,39px);font-weight:900;line-height:1.6;margin:0 0 8px}
+.auth-story-copy{color:#c3b6d6;line-height:2;margin:0;max-width:390px}
+.auth-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.auth-tags span{border:1px solid #ffffff22;background:#ffffff0b;border-radius:99px;padding:7px 11px;font-size:11px;color:#ded2ee}
+.auth-art{height:285px;position:relative;display:grid;place-items:center}
+.auth-ring{position:absolute;border:1px solid #c7aaff55;border-radius:50%;width:230px;height:230px;transform:rotate(35deg) scaleX(.65);animation:authOrbit 22s linear infinite}
+.auth-ring.r2{width:185px;height:270px;border-color:#7de5d055;transform:rotate(-40deg) scaleX(.7);animation-duration:29s;animation-direction:reverse}
+.auth-orbit-core{width:118px;height:118px;border-radius:34px;display:grid;place-items:center;background:linear-gradient(145deg,#d8c4ff,#7848c9);color:#fff;font-size:60px;font-weight:900;box-shadow:0 0 80px #a47aff66;z-index:1}
+.auth-star{position:absolute;top:18%;right:25%;color:#e2cfff;font-size:26px;animation:authPulse 3s ease-in-out infinite}
+.auth-float{position:absolute;padding:9px 13px;border-radius:12px;background:#211a32;border:1px solid #8064a7;color:#eee5ff;font-size:11px;box-shadow:0 12px 30px #0005}
+.auth-float.f1{top:13%;left:8%}.auth-float.f2{bottom:12%;right:8%}
+@keyframes authOrbit{to{rotate:360deg}}@keyframes authPulse{50%{transform:scale(1.2);opacity:.65}}
+.auth-card-new{border:0;border-radius:0;box-shadow:none;background:linear-gradient(155deg,#191528,#100e1b);padding:clamp(25px,4vw,52px);display:flex;flex-direction:column;justify-content:center}
+.auth-card-new h2{font-size:29px;margin:12px 0 6px}.auth-kicker{font-size:11px;color:#c2a4ff;letter-spacing:.4px}
+.auth-card-new .auth-form{gap:15px;margin-top:26px}
+.auth-card-new input,.auth-card-new select{background:#0d0b16;border-color:#3c3150;min-height:49px}
+.auth-submit{width:100%;min-height:51px;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:5px}
+.auth-submit span{font-size:18px}
+.auth-switch{text-align:center;font-size:12px;color:#a99bbd;margin:22px 0 0}
+.text-action{padding:0;background:none;border:0;box-shadow:none;color:#c8aaff;font-size:12px;text-decoration:underline;text-underline-offset:4px}
+.text-action:hover{transform:none;background:none;filter:brightness(1.2)}
+.auth-message{min-height:20px;line-height:1.9;margin:16px 0 0;color:#e6d6ff;overflow-wrap:anywhere}
+.auth-security{border-top:1px solid #ffffff12;padding-top:17px;margin-top:18px;color:#8f849f;font-size:10px;line-height:1.9}
+.auth-security span{color:#9ee8cf;margin-left:5px}.auth-mobile-brand{display:none}
+@media(max-width:760px){.auth-shell{padding:0;display:block;background:#100d1b}.auth-layout{display:block;min-height:100vh;border:0;border-radius:0;background:#100e1b}.auth-story{display:none}.auth-card-new{min-height:100vh;border-radius:0;padding:28px 23px;max-width:560px;margin:auto}.auth-mobile-brand{display:flex;align-items:center;gap:10px;margin-bottom:34px;font-size:17px;letter-spacing:2px}.auth-mobile-brand .logo{width:40px;height:40px}.auth-card-new h2{font-size:26px}}
 </style>
 </head>
 <body>
@@ -39,29 +73,40 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
  </main>
 </div>
 <div id="authView" class="auth-shell hidden">
- <div class="auth-card">
-  <div class="brand"><div class="logo">N</div><div><h1>NEARGO</h1><small>Closer to Your Goal.</small></div></div>
-  <div id="loginPanel">
-   <h2>مسیرت رو از همین‌جا شروع کن</h2><p class="muted small">فضای تحصیلی اختصاصی تو؛ با برنامه‌ای که از اطلاعات خودت ساخته می‌شود.</p>
-   <form id="loginForm" class="auth-form">
-    <div class="field"><label>نام کاربری</label><input name="username" type="text" autocomplete="username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9._-]{3,24}" placeholder="مثلاً amir_1387"></div>
-    <div class="field"><label>رمز عبور</label><input name="password" type="password" autocomplete="current-password" required placeholder="رمز عبور"></div>
-    <button type="submit">ورود به NEARGO</button>
-   </form>
-   <div class="auth-tabs"><button class="ghost" id="showSignup">ساخت حساب دانش‌آموز</button></div>
-  </div>
-  <div id="signupPanel" class="hidden">
-   <h2>ساخت حساب تحصیلی</h2><p class="muted small">اطلاعات تحصیلی را بعداً هم می‌توانی کامل کنی.</p>
-   <form id="signupForm" class="auth-form">
-    <div class="field"><label>نام و نام خانوادگی</label><input name="display_name" required maxlength="70"></div>
-    <div class="field"><label>رشته</label><select name="track" required><option value="math">ریاضی و فیزیک</option><option value="experimental">علوم تجربی</option></select></div>
-    <div class="field"><label>نام کاربری (۳ تا ۲۴ حرف انگلیسی یا عدد)</label><input name="username" type="text" autocomplete="username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9._-]{3,24}" placeholder="مثلاً kimiya_12"></div>
-    <div class="field"><label>رمز عبور (حداقل ۸ نویسه)</label><input name="password" type="password" minlength="8" autocomplete="new-password" required></div>
-    <button type="submit">ایجاد حساب</button><button type="button" class="ghost" id="backLogin">بازگشت به ورود</button>
-   </form>
-  </div>
-  <p id="authMessage" class="small muted" aria-live="polite"></p>
-  <div class="notice">اطلاعات هر حساب جداگانه و با دسترسی امن پایگاه داده نگهداری می‌شود. رمز عبور را با کسی به اشتراک نگذار.</div>
+ <div class="auth-layout">
+  <section class="auth-story">
+   <div class="brand"><div class="logo">N</div><div><h1>NEARGO</h1><small>Closer to Your Goal.</small></div></div>
+   <div class="auth-art" aria-hidden="true"><div class="auth-ring r1"></div><div class="auth-ring r2"></div><div class="auth-star">✦</div><div class="auth-orbit-core">N</div><span class="auth-float f1">برنامه‌ریزی دقیق</span><span class="auth-float f2">پیشرفت واقعی</span></div>
+   <p class="auth-story-title">هر قدم، نزدیک‌تر به هدفت.</p>
+   <p class="auth-story-copy">یک فضای شخصی برای برنامه‌ریزی، ثبت مطالعه و شناخت مسیر تحصیلی‌ات.</p>
+   <div class="auth-tags"><span>پایه دوازدهم</span><span>ریاضی و تجربی</span><span>همگام‌سازی آنلاین</span></div>
+  </section>
+  <section class="auth-card auth-card-new">
+   <div class="auth-mobile-brand"><span class="logo">N</span><b>NEARGO</b></div>
+   <div id="loginPanel">
+    <span class="auth-kicker">ورود به فضای شخصی</span><h2>خوش برگشتی!</h2><p class="muted small">برای ادامه مسیر، وارد حساب تحصیلی خودت شو.</p>
+    <form id="loginForm" class="auth-form">
+     <div class="field"><label>ایمیل حساب یا نام کاربری قدیمی</label><input name="email" type="text" inputmode="email" autocomplete="username" required placeholder="name@example.com"></div>
+     <div class="field"><label>رمز عبور</label><input name="password" type="password" autocomplete="current-password" required placeholder="رمز عبور"></div>
+     <button type="submit" class="auth-submit">ورود به NEARGO <span>←</span></button>
+    </form>
+    <p class="auth-switch">حساب نداری؟ <button type="button" class="text-action" id="showSignup">ساخت حساب جدید</button></p>
+   </div>
+   <div id="signupPanel" class="hidden">
+    <span class="auth-kicker">شروع یک مسیر تازه</span><h2>حساب تحصیلی بساز</h2><p class="muted small">ایمیل واقعی وارد کن تا لینک فعال‌سازی حساب برایت ارسال شود.</p>
+    <form id="signupForm" class="auth-form">
+     <div class="field"><label>نام و نام خانوادگی</label><input name="display_name" type="text" autocomplete="name" required maxlength="70" placeholder="نام کامل"></div>
+     <div class="field"><label>ایمیل معتبر</label><input name="email" type="email" inputmode="email" autocomplete="email" required maxlength="254" placeholder="name@example.com"></div>
+     <div class="field"><label>رشته تحصیلی</label><select name="track" required><option value="math">ریاضی و فیزیک</option><option value="experimental">علوم تجربی</option></select></div>
+     <div class="field"><label>رمز عبور (حداقل ۸ نویسه)</label><input name="password" type="password" minlength="8" autocomplete="new-password" required placeholder="یک رمز مطمئن انتخاب کن"></div>
+     <div class="field"><label>تکرار رمز عبور</label><input name="confirm_password" type="password" minlength="8" autocomplete="new-password" required placeholder="رمز را دوباره وارد کن"></div>
+     <button type="submit" class="auth-submit">ایجاد حساب و ادامه <span>←</span></button>
+    </form>
+    <p class="auth-switch">قبلاً حساب ساخته‌ای؟ <button type="button" class="text-action" id="backLogin">ورود به حساب</button></p>
+   </div>
+   <p id="authMessage" class="auth-message small" aria-live="polite"></p>
+   <div class="auth-security"><span>◇</span> رمز عبورت به‌صورت امن توسط سامانه احراز هویت نگهداری می‌شود.</div>
+  </section>
  </div>
 </div>
 
@@ -268,15 +313,15 @@ const num=(x)=>Number(x||0);
 const show=(id)=>$(id).classList.remove('hidden');
 const hide=(id)=>$(id).classList.add('hidden');
 function toast(s){$('toast').textContent=s;show('toast');clearTimeout(toast.timer);toast.timer=setTimeout(()=>hide('toast'),3300)}
-function friendlyError(e){const m=String(e?.message||e||'خطای نامشخص');if(m.includes('Invalid login'))return 'نام کاربری یا رمز عبور درست نیست.';if(m.includes('Email not confirmed'))return 'تأیید ایمیل هنوز در تنظیمات سامانه فعال است؛ باید برای ورود بدون ایمیل غیرفعال شود.';if(m.includes('already registered')||m.includes('already been registered'))return 'این نام کاربری قبلاً انتخاب شده است.';if(m.includes('duplicate key'))return 'این مورد قبلاً ثبت شده است.';if(m.includes('row-level security'))return 'دسترسی این عملیات مجاز نیست؛ دوباره وارد شو.';return m.slice(0,180)}
-function authEmail(username){const u=String(username||'').trim().toLowerCase();if(u.includes('@'))return u;return u+'@users.neargo.invalid'}
-function setAuthPanel(which){['loginPanel','signupPanel'].forEach(id=>hide(id));show(which);$('authMessage').textContent=''}
+function friendlyError(e){const m=String(e?.message||e||'خطای نامشخص');const x=m.toLowerCase();if(x.includes('invalid login'))return 'ایمیل یا رمز عبور درست نیست.';if(x.includes('email not confirmed'))return 'ایمیل این حساب هنوز تأیید نشده است. صندوق ورودی و پوشه هرزنامه را بررسی کن.';if(x.includes('already registered')||x.includes('already been registered'))return 'این ایمیل قبلاً حساب دارد؛ از بخش ورود استفاده کن.';if(x.includes('password should be at least'))return 'رمز عبور باید حداقل ۸ نویسه باشد.';if(x.includes('rate limit'))return 'درخواست‌ها زیاد شده؛ چند دقیقه بعد دوباره امتحان کن.';if(x.includes('redirect')&&x.includes('allow'))return 'نشانی بازگشت سایت در تنظیمات Supabase مجاز نشده است. آدرس سایت را در Auth → URL Configuration به Redirect URLs اضافه کن.';if(x.includes('row-level security'))return 'دسترسی این عملیات مجاز نیست؛ دوباره وارد شو.';return m.slice(0,220)}
+function authEmail(identifier){const u=String(identifier||'').trim().toLowerCase();return u.includes('@')?u:u+'@users.neargo.invalid'}
+function setAuthPanel(which){['loginPanel','signupPanel'].forEach(id=>hide(id));show(which);$('authMessage').textContent='';$('authMessage').style.color=''}
 function openAuth(panel){hide('landingView');show('authView');setAuthPanel(panel)}
 $('landingLogin').onclick=$('landingLoginHero').onclick=()=>openAuth('loginPanel');
 $('landingSignup').onclick=$('landingSignupHero').onclick=()=>openAuth('signupPanel');
 $('showSignup').onclick=()=>setAuthPanel('signupPanel');$('backLogin').onclick=()=>setAuthPanel('loginPanel');
-$('loginForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const username=val(f,'username').trim().toLowerCase();$('authMessage').textContent='در حال ورود...';const {data,error}=await db.auth.signInWithPassword({email:authEmail(username),password:val(f,'password')});if(error){$('authMessage').textContent=friendlyError(error);return}await startApp(data.user)};
-$('signupForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const username=val(f,'username').trim().toLowerCase();if(!/^[a-z0-9._-]{3,24}$/.test(username)){$('authMessage').textContent='نام کاربری باید ۳ تا ۲۴ نویسه و فقط شامل حروف انگلیسی، عدد، نقطه، خط تیره یا زیرخط باشد.';return}$('authMessage').textContent='در حال ساخت حساب...';const {data,error}=await db.auth.signUp({email:authEmail(username),password:val(f,'password'),options:{data:{username,display_name:val(f,'display_name'),track:val(f,'track')}}});if(error){$('authMessage').textContent=friendlyError(error);return}if(data.session&&data.user){await startApp(data.user)}else{$('authMessage').textContent='حساب ایجاد شد، اما ورود خودکار انجام نشد. تنظیم «تأیید ایمیل» در Supabase هنوز فعال است و باید خاموش شود.'}};
+$('loginForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const identifier=val(f,'email').trim().toLowerCase();$('authMessage').textContent='در حال بررسی اطلاعات حساب...';const {data,error}=await db.auth.signInWithPassword({email:authEmail(identifier),password:val(f,'password')});if(error){$('authMessage').textContent=friendlyError(error);return}await startApp(data.user)};
+$('signupForm').onsubmit=async e=>{e.preventDefault();const f=e.target;const email=val(f,'email').trim().toLowerCase();const password=val(f,'password');if(password!==val(f,'confirm_password')){$('authMessage').textContent='رمز عبور و تکرار آن یکسان نیستند.';return}if(password.length<8){$('authMessage').textContent='رمز عبور باید حداقل ۸ نویسه باشد.';return}$('authMessage').textContent='در حال ساخت حساب امن...';const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname,data:{display_name:val(f,'display_name').trim(),track:val(f,'track')}}});if(error){$('authMessage').textContent=friendlyError(error);return}if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){$('authMessage').textContent='این ایمیل قبلاً ثبت شده است. از صفحه ورود استفاده کن.';return}if(data.session&&data.user){$('authMessage').textContent='حساب با موفقیت ساخته شد؛ در حال ورود...';await startApp(data.user)}else if(data.user){$('authMessage').textContent='درخواست ثبت‌نام با موفقیت به Supabase رسید. برای فعال‌شدن حساب، ایمیل تأیید را باز کن و روی لینک آن بزن؛ سپس به همین سایت برمی‌گردی. اگر ایمیل نرسید، پوشه هرزنامه را بررسی کن.';$('authMessage').style.color='#a8efd7'}else{$('authMessage').textContent='پاسخ ثبت‌نام کامل نبود؛ دوباره تلاش کن.'}};
 
 $('logoutBtn').onclick=async()=>{if(state.channel)await db.removeChannel(state.channel);await db.auth.signOut();location.reload()};
 db.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){toast('اکنون می‌توانی رمز جدید را از فرایند بازیابی تنظیم کنی.')}});
