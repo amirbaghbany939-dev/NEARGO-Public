@@ -11,4 +11,4 @@
 #snakeCanvas{width:min(100%,300px);aspect-ratio:1;background:#0b0a13;border:1px solid #68518a;border-radius:15px}
 @media(max-width:760px){.enhanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:440px){.motivation-grid{grid-template-columns:1fr}.quick-drawer{top:64px}}
 
-@media(min-width:721px){.mobile-bottom-nav{display:none!important}}
+@media (pointer:fine) and (min-width:721px){.mobile-bottom-nav{display:none!important}}
