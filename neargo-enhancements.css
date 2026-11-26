@@ -116,3 +116,10 @@
 @keyframes homeGlow{to{transform:translate(24px,18px) scale(1.15);opacity:.75}}
 @keyframes homeRing{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){#tab-dashboard .hero:before,#tab-dashboard .hero:after,#tab-dashboard .card,.planner-question-card{animation:none!important;transition:none!important}}
+
+.planner-priority-axis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;width:100%;direction:rtl}
+.planner-priority-axis button{min-width:0;min-height:74px;padding:8px 4px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:7px;background:#ffffff08;border:1px solid #ffffff20;color:#cfc1e3;box-shadow:none;border-radius:13px;font-size:11px}
+.planner-priority-axis button i{width:25px;height:25px;border:1px solid #9f83cb88;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px}
+.planner-priority-axis button.selected{background:linear-gradient(145deg,#a47aff35,#e7c98d1c);border-color:#c4a5ff;color:#fff;box-shadow:0 0 18px #a47aff20}
+.planner-priority-axis button.selected i{background:#a47aff;color:#fff;border-color:#d5c1ff}
+@media(max-width:390px){.planner-priority-axis{gap:4px}.planner-priority-axis button{font-size:10px;padding:7px 2px}}
