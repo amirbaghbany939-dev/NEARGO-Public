@@ -797,7 +797,7 @@ function plannerBuildTasks(scheduleRows,uid){
    const duration=q.duration;let found=-1;
    for(let t=cursor;t+duration<=23*60+30;t+=5){if(!d.blocks.some(b=>t<b.end&&t+duration>b.start)){found=t;break}}
    if(found<0)return;
-   tasks.push({user_id:uid,title:q.topic?'مرور '+q.subject+' · '+q.topic:(q.type==='مرور آزمون'?'آمادگی آزمون '+q.subject:'مطالعه '+q.subject),subject:q.subject,task_date:d.key,starts_at:minToTime(found),duration_minutes:duration,task_type:'study',priority:q.priority||'normal',notes:'[NEARGO-AUTO] برنامه ساخته‌شده از برنامه‌ریزی مرحله‌ای.'});
+   tasks.push({user_id:uid,title:q.topic?'مرور '+q.subject+' · '+q.topic:(q.type==='مرور آزمون'?'آمادگی آزمون '+q.subject:'مطالعه '+(q.type||'')+' · '+q.subject),subject:q.subject,task_date:d.key,starts_at:minToTime(found),duration_minutes:duration,task_type:'study',priority:q.priority||'normal',notes:'[NEARGO-AUTO] برنامه ساخته‌شده از برنامه‌ریزی مرحله‌ای.'});
    d.blocks.push({start:found,end:found+duration});cursor=found+duration+10;studySinceBreak+=duration;
    if(studySinceBreak>=90&&cursor+20<=23*60+30&&!d.blocks.some(b=>cursor<b.end&&cursor+20>b.start)){tasks.push({user_id:uid,title:'استراحت ۲۰ دقیقه‌ای',task_date:d.key,starts_at:minToTime(cursor),duration_minutes:20,task_type:'rest',priority:'low',notes:'[NEARGO-AUTO] استراحت بین مطالعه‌ها'});d.blocks.push({start:cursor,end:cursor+20});cursor+=20;studySinceBreak=0}
   });
