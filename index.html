@@ -135,7 +135,7 @@ body[data-weather="snow"]{background-image:radial-gradient(ellipse at 80% 0%,#d4
 }
 @media(min-width:721px){.mobile-bottom-nav{display:none}}
 </style>
-<link rel="stylesheet" href="./neargo-enhancements.css?v=nav6">
+<link rel="stylesheet" href="./neargo-enhancements.css?v=nav7">
 </head>
 <body>
 <div id="landingView" class="landing-shell">
@@ -638,7 +638,198 @@ function setupRealtime(){if(state.channel)db.removeChannel(state.channel);state.
 async function updateWeather(){const hour=new Date().getHours();document.body.dataset.period=hour<6||hour>=20?'night':hour<11?'morning':hour<17?'day':'evening';const fallback={latitude:38.08,longitude:46.29};const fetchWeather=async(lat,lon)=>{const u='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code&timezone=auto';const r=await fetch(u);if(!r.ok)throw Error('weather');return r.json()};try{let coords=fallback;if(navigator.geolocation){coords=await new Promise(resolve=>navigator.geolocation.getCurrentPosition(p=>resolve({latitude:p.coords.latitude,longitude:p.coords.longitude}),()=>resolve(fallback),{timeout:2500,maximumAge:3600000}))}const data=await fetchWeather(coords.latitude,coords.longitude);const c=data.current;const code=c.weather_code;document.body.dataset.weather=code===0?'clear':code<=3?'cloud':code<=48?'fog':code<=67?'rain':code<=77?'snow':code<=82?'rain':'storm';const info=code===0?['☀️','صاف']:code<=3?['🌤️','نیمه‌ابری']:code<=48?['🌫️','مه‌آلود']:code<=67?['🌧️','بارانی']:code<=77?['❄️','برفی']:code<=82?['🌦️','رگبار']:['⛈️','طوفانی'];$('weatherIcon').textContent=info[0];$('weatherTemp').textContent=Math.round(c.temperature_2m)+'°';$('weatherText').textContent=info[1]}catch(e){document.body.dataset.weather='unknown';$('weatherIcon').textContent='◌';$('weatherTemp').textContent='—';$('weatherText').textContent='آب‌وهوا در دسترس نیست'}}
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 db.auth.getSession().then(({data})=>{if(data.session)startApp(data.session.user)});
+
+/* NEARGO planner wizard v2 — one question at a time */
+const plannerFlow={index:0,days:{},classes:[],extras:[],hasClasses:null,hasExtras:null};
+const plannerDayOrder=[{label:'شنبه',value:6},{label:'یکشنبه',value:0},{label:'دوشنبه',value:1},{label:'سه‌شنبه',value:2},{label:'چهارشنبه',value:3},{label:'پنجشنبه',value:4},{label:'جمعه',value:5}];
+function plannerWeekStart(){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+(6-d.getDay()+7)%7);return d}
+function plannerDateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function plannerJParts(iso){const d=new Date(iso+'T12:00:00Z'),p=new Intl.DateTimeFormat('en-US-u-ca-persian',{timeZone:'UTC',year:'numeric',month:'numeric',day:'numeric'}).formatToParts(d),o={};p.forEach(x=>{if(x.type!=='literal')o[x.type]=Number(x.value)});return {y:o.year,m:o.month,d:o.day}}
+function plannerJYearStart(y){const base=Date.UTC(y+621,2,15,12);for(let i=-8;i<=12;i++){const d=new Date(base+i*86400000),iso=d.toISOString().slice(0,10),p=plannerJParts(iso);if(p.y===y&&p.m===1&&p.d===1)return Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),12)}throw new Error('تبدیل تاریخ شمسی انجام نشد.')}
+function plannerJToIso(y,m,d){const days=(m<=6?(m-1)*31:186+(m-7)*30)+(d-1),x=new Date(plannerJYearStart(y)+days*86400000);return [x.getUTCFullYear(),String(x.getUTCMonth()+1).padStart(2,'0'),String(x.getUTCDate()).padStart(2,'0')].join('-')}
+function plannerIsoToJ(iso){return plannerJParts(iso)}
+function plannerJToday(){return plannerIsoToJ(plannerDateKey(new Date()))}
+function plannerJDisplay(iso){const p=plannerIsoToJ(iso);return new Intl.NumberFormat('fa-IR').format(p.d)+' '+['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'][p.m-1]+' '+new Intl.NumberFormat('fa-IR').format(p.y)}
+function plannerDayDate(weekday){const start=plannerWeekStart(),d=new Date(start);d.setDate(d.getDate()+(weekday===6?0:weekday+1));return d}
+function plannerGetDay(w){return plannerFlow.days[w]||(plannerFlow.days[w]={school:null,bells:4,start:'07:00',end:'14:30',exam:null,examSubject:'',examTopic:'',priority:'معمولی'})}
+function plannerSteps(){
+ const s=[];
+ plannerDayOrder.forEach(d=>{
+  const x=plannerGetDay(d.value),base='d'+d.value+'_';
+  s.push({key:base+'school',day:d.label,label:'آیا '+d.label+' مدرسه داری؟',type:'yesno',get:()=>x.school,set:v=>x.school=v});
+  s.push({key:base+'bells',day:d.label,label:'شنبه چند زنگ مدرسه داری؟'.replace('شنبه',d.label),type:'number',min:1,max:12,when:()=>x.school===true,get:()=>x.bells,set:v=>x.bells=v});
+  s.push({key:base+'start',day:d.label,label:'ساعت شروع مدرسه '+d.label+' چه زمانی است؟',type:'time',when:()=>x.school===true,get:()=>x.start,set:v=>x.start=v});
+  s.push({key:base+'end',day:d.label,label:'ساعت پایان مدرسه '+d.label+' چه زمانی است؟',type:'time',when:()=>x.school===true,get:()=>x.end,set:v=>x.end=v});
+  s.push({key:base+'exam',day:d.label,label:'آیا '+d.label+' آزمون مدرسه‌ای یا خارج از مدرسه داری؟',type:'yesno',get:()=>x.exam,set:v=>x.exam=v});
+  s.push({key:base+'examSubject',day:d.label,label:'درس آزمون '+d.label+' چیست؟',type:'text',when:()=>x.exam===true,get:()=>x.examSubject,set:v=>x.examSubject=v});
+  s.push({key:base+'examTopic',day:d.label,label:'موضوع آزمون '+d.label+' چیست؟',type:'text',when:()=>x.exam===true,get:()=>x.examTopic,set:v=>x.examTopic=v});
+  s.push({key:base+'priority',day:d.label,label:'اهمیت آزمون '+d.label+' چقدر است؟',type:'select',options:['کم‌اهمیت','کمی مهم','معمولی','بسیار مهم'],when:()=>x.exam===true,get:()=>x.priority,set:v=>x.priority=v});
+ });
+ s.push({key:'hasClasses',label:'آیا کلاس خارج از مدرسه داری؟',type:'yesno',get:()=>plannerFlow.hasClasses,set:v=>{plannerFlow.hasClasses=v;if(v&&plannerFlow.classes.length===0)plannerFlow.classes.push({date:plannerJToday(),title:'',start:'16:00',hours:2,exam:null,examSubject:'',examTopic:''});if(!v)plannerFlow.classes=[]}});
+ plannerFlow.classes.forEach((x,i)=>{
+  const b='class'+i+'_';
+  s.push({key:b+'date',label:'تاریخ شمسی کلاس '+(i+1)+' چه روزی است؟',type:'jalali-date',get:()=>x.date,set:v=>x.date=v});
+  s.push({key:b+'title',label:'نام درس یا کلاس چیست؟',type:'text',get:()=>x.title,set:v=>x.title=v});
+  s.push({key:b+'start',label:'ساعت شروع کلاس چه زمانی است؟',type:'time',get:()=>x.start,set:v=>x.start=v});
+  s.push({key:b+'hours',label:'مدت کلاس چند ساعت است؟',type:'number',min:.5,max:10,step:.5,get:()=>x.hours,set:v=>x.hours=v});
+  s.push({key:b+'exam',label:'آیا این کلاس آزمون دارد؟',type:'yesno',get:()=>x.exam,set:v=>x.exam=v});
+  s.push({key:b+'examSubject',label:'درس آزمون این کلاس چیست؟',type:'text',when:()=>x.exam===true,get:()=>x.examSubject,set:v=>x.examSubject=v});
+  s.push({key:b+'examTopic',label:'موضوع آزمون این کلاس چیست؟',type:'text',when:()=>x.exam===true,get:()=>x.examTopic,set:v=>x.examTopic=v});
+  s.push({key:b+'more',label:'کلاس خارج از مدرسه دیگری هم داری؟',type:'yesno',get:()=>x.more,set:v=>{x.more=v;if(v&&plannerFlow.classes.length<8)plannerFlow.classes.push({date:plannerJToday(),title:'',start:'16:00',hours:2,exam:null,examSubject:'',examTopic:''})}});
+ });
+ s.push({key:'hasExtras',label:'آیا می‌خواهی درس‌های اضافه هم در برنامه هفتگی داشته باشی؟',type:'yesno',get:()=>plannerFlow.hasExtras,set:v=>{plannerFlow.hasExtras=v;if(v&&plannerFlow.extras.length===0)plannerFlow.extras.push({type:'تخصصی',subject:'',hours:2,more:null});if(!v)plannerFlow.extras=[]}});
+ plannerFlow.extras.forEach((x,i)=>{
+  const b='extra'+i+'_';
+  s.push({key:b+'type',label:'این درس '+(i+1)+' عمومی است یا تخصصی؟',type:'select',options:['عمومی','تخصصی'],get:()=>x.type,set:v=>x.type=v});
+  s.push({key:b+'subject',label:'نام درس چیست؟',type:'text',get:()=>x.subject,set:v=>x.subject=v});
+  s.push({key:b+'hours',label:'چند ساعت در هفته برای این درس می‌خواهی؟',type:'number',min:.5,max:30,step:.5,get:()=>x.hours,set:v=>x.hours=v});
+  s.push({key:b+'more',label:'درس اضافه دیگری هم می‌خواهی ثبت کنی؟',type:'yesno',get:()=>x.more,set:v=>{x.more=v;if(v&&plannerFlow.extras.length<20)plannerFlow.extras.push({type:'تخصصی',subject:'',hours:2,more:null})}});
+ });
+ s.push({key:'review',label:'همه اطلاعات آماده است. برنامه هفتگی را بسازیم؟',type:'review'});
+ return s;
+}
+function plannerCurrentSteps(){return plannerSteps().filter(x=>!x.when||x.when())}
+function plannerRenderDateSelect(value){
+ let p;try{p=value?plannerIsoToJ(value):plannerJToday()}catch(e){p=plannerJToday()}
+ const months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+ const years=Array.from({length:7},(_,i)=>plannerJToday().y-3+i);
+ const md=p.m<=6?31:p.m<=11?30:(plannerJYearStart(p.y+1)-plannerJYearStart(p.y))/86400000-336;
+ return '<div class="planner-jdate"><select id="plannerJYear">'+years.map(y=>'<option value="'+y+'" '+(y===p.y?'selected':'')+'>'+new Intl.NumberFormat('fa-IR').format(y)+'</option>').join('')+'</select><select id="plannerJMonth">'+months.map((m,i)=>'<option value="'+(i+1)+'" '+(i+1===p.m?'selected':'')+'>'+m+'</option>').join('')+'</select><select id="plannerJDay">'+Array.from({length:md},(_,i)=>'<option value="'+(i+1)+'" '+(i+1===p.d?'selected':'')+'>'+new Intl.NumberFormat('fa-IR').format(i+1)+'</option>').join('')+'</select></div>';
+}
+function showPlanSetup(){
+ hide('appView');hide('onboardingView');show('planSetupView');
+ plannerFlow.index=0;plannerFlow.days={};plannerFlow.classes=[];plannerFlow.extras=[];plannerFlow.hasClasses=null;plannerFlow.hasExtras=null;
+ plannerDayOrder.forEach(d=>plannerGetDay(d.value));
+ (state.schedule||[]).filter(x=>String(x.notes||'').includes('[NEARGO-SETUP]')&&x.schedule_type==='school').forEach(x=>{const d=plannerGetDay(x.weekday);d.school=true;const m=String(x.notes||'').match(/تعداد زنگ:\s*(\d+)/);d.bells=Number(m?.[1]||4);d.start=x.starts_at;d.end=x.ends_at});
+ (state.studyPrefs?.subjects||[]).forEach(x=>plannerFlow.extras.push({type:x.type||'تخصصی',subject:x.subject||'',hours:Number(x.hours||1)}));
+ if(plannerFlow.extras.length)plannerFlow.hasExtras=true;
+ const groups={};(state.schedule||[]).filter(x=>x.schedule_type==='class'&&String(x.notes||'').includes('[NEARGO-DATE:')).forEach(x=>{const m=String(x.notes).match(/\[NEARGO-DATE:(\d{4}-\d{2}-\d{2})\]/),key=(m?.[1]||'')+'|'+x.title;if(!groups[key])groups[key]={date:m?.[1]?plannerIsoToJ(m[1]):plannerJToday(),title:x.title,start:x.starts_at,hours:0,exam:null};groups[key].hours+=Math.max(0,(timeToMin(x.ends_at)-timeToMin(x.starts_at))/60)});
+ plannerFlow.classes=Object.values(groups);if(plannerFlow.classes.length)plannerFlow.hasClasses=true;
+ (state.exams||[]).filter(x=>String(x.notes||'').startsWith('[NEARGO_PLANNER_EXAM]')).forEach(x=>{const m=String(x.notes).slice(20);let z={};try{z=JSON.parse(m)}catch(e){}const d=plannerDayOrder.find(q=>plannerDateKey(plannerDayDate(q.value))===x.exam_date);if(d){const a=plannerGetDay(d.value);a.exam=true;a.examSubject=z.subject||x.title;a.examTopic=z.topic||'';a.priority=z.priority||'معمولی'}});
+ renderSetupStep();
+}
+function renderSetupStep(){
+ const host=$('setupStepContent'),steps=plannerCurrentSteps(),step=steps[plannerFlow.index];
+ $('setupStepLabel').textContent='پرسش '+Math.min(plannerFlow.index+1,steps.length)+' از '+steps.length;
+ $('setupProgressBar').style.width=Math.min(100,((plannerFlow.index+1)/steps.length)*100)+'%';
+ $('setupBack').style.visibility=plannerFlow.index===0?'hidden':'visible';
+ $('setupNext').textContent=step?.type==='review'?'ساخت برنامه هفتگی':'بعدی';
+ $('setupMessage').textContent='';
+ if(!step){host.innerHTML='<div class="planner-review"><h2>اطلاعات کامل شد</h2><p>برای ساخت برنامه هفتگی آماده‌ایم.</p></div>';return}
+ let input='';
+ if(step.type==='yesno')input='<div class="planner-choice"><button type="button" data-answer="yes">بله</button><button type="button" class="ghost" data-answer="no">خیر</button></div>';
+ else if(step.type==='review')input='<div class="planner-review"><span>✓</span><p>اطلاعات مدرسه، آزمون‌ها، کلاس‌ها و درس‌های اضافه ثبت شده‌اند.</p><small>تاریخ‌ها همگی شمسی هستند.</small></div>';
+ else if(step.type==='jalali-date')input=plannerRenderDateSelect(step.get());
+ else if(step.type==='select')input='<select id="plannerAnswer">'+step.options.map(x=>'<option '+(x===step.get()?'selected':'')+'>'+x+'</option>').join('')+'</select>';
+ else input='<input id="plannerAnswer" type="'+(step.type==='number'?'number':step.type)+'" '+(step.min!==undefined?'min="'+step.min+'"':'')+' '+(step.max!==undefined?'max="'+step.max+'"':'')+' '+(step.step!==undefined?'step="'+step.step+'"':'')+' value="'+esc(step.get()??'')+'" placeholder="پاسخ را وارد کن">';
+ const dayLabel=step.day?'<span class="planner-day-kicker">روز '+step.day+'</span>':'<span class="planner-day-kicker">تنظیم برنامه هفتگی</span>';
+ host.innerHTML='<div class="planner-question-card">'+dayLabel+'<h2>'+step.label+'</h2><div class="planner-answer">'+input+'</div><p class="planner-hint">'+(step.type==='jalali-date'?'تاریخ را به تقویم شمسی انتخاب کن.':step.type==='review'?'':'در هر مرحله فقط همین یک سؤال نمایش داده می‌شود.')+'</p></div>';
+ host.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{step.set(b.dataset.answer==='yes');plannerAfterAnswer(step)});
+ $('setupMessage').textContent='';
+}
+function plannerAfterAnswer(step){
+ if(step.key==='hasClasses'&&plannerFlow.hasClasses===false)plannerFlow.classes=[];
+ if(step.key==='hasExtras'&&plannerFlow.hasExtras===false)plannerFlow.extras=[];
+ if(/_more$/.test(step.key)&&step.get()===true){}
+ plannerFlow.index++;renderSetupStep();
+}
+function plannerReadAnswer(step){
+ if(step.type==='jalali-date'){const y=Number($('plannerJYear').value),m=Number($('plannerJMonth').value),d=Number($('plannerJDay').value);return plannerJToIso(y,m,d)}
+ const el=$('plannerAnswer');if(!el)return null;const v=el.value.trim();
+ if(!v)return null;
+ if(step.type==='number'){const n=Number(v);if(!Number.isFinite(n)||n<Number(step.min||0)||n>Number(step.max||999))return null;return n}
+ return v;
+}
+$('setupNext').onclick=async()=>{
+ const steps=plannerCurrentSteps(),step=steps[plannerFlow.index];
+ if(!step)return;
+ if(step.type==='review'){await saveSetupAndGenerate();return}
+ if(step.type==='yesno'){plannerFlow.index++;renderSetupStep();return}
+ const v=plannerReadAnswer(step);if(v===null){$('setupMessage').textContent='لطفاً پاسخ معتبر وارد کن.';return}
+ step.set(v);
+ if(step.key.endsWith('_more')&&v===true){
+  if(step.key.startsWith('class'))plannerFlow.classes.push({date:plannerJToday(),title:'',start:'16:00',hours:2,exam:null,examSubject:'',examTopic:''});
+  if(step.key.startsWith('extra'))plannerFlow.extras.push({type:'تخصصی',subject:'',hours:2,more:null});
+ }
+ plannerFlow.index++;renderSetupStep();
+};
+$('setupBack').onclick=()=>{
+ plannerFlow.index=Math.max(0,plannerFlow.index-1);renderSetupStep();
+};
+function plannerMakeScheduleRows(uid){
+ const rows=[];
+ plannerDayOrder.forEach(d=>{
+  const x=plannerGetDay(d.value);if(x.school)rows.push({user_id:uid,title:'مدرسه · '+x.bells+' زنگ',schedule_type:'school',weekday:d.value,starts_at:x.start,ends_at:x.end,notes:'[NEARGO-SETUP] تعداد زنگ: '+x.bells});
+ });
+ plannerFlow.classes.forEach(c=>{
+  const date=plannerJToIso(...c.date.split('-').map(Number)),weekday=new Date(date+'T12:00:00').getDay(),tag='[NEARGO-DATE:'+date+'][NEARGO-SETUP] ';
+  let cursor=timeToMin(c.start),left=Math.round(Number(c.hours)*60),part=1;
+  while(left>0){const span=Math.min(90,left);rows.push({user_id:uid,title:c.title+(part>1?' · بخش '+part:''),schedule_type:'class',weekday,starts_at:minToTime(cursor),ends_at:minToTime(cursor+span),subject:c.title,notes:tag+'مدت کلاس'});cursor+=span;left-=span;part++;if(span===90){rows.push({user_id:uid,title:'استراحت ۲۰ دقیقه‌ای بین کلاس',schedule_type:'personal',weekday,starts_at:minToTime(cursor),ends_at:minToTime(cursor+20),notes:tag+'[NEARGO-CLASS-REST]'});cursor+=20}}
+ });
+ return rows;
+}
+function plannerBuildTasks(scheduleRows,uid){
+ const start=plannerWeekStart(),days=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(d.getDate()+i);return {date:d,key:plannerDateKey(d),weekday:d.getDay(),sessions:[],minutes:0,blocks:[]}}),tasks=[];
+ days.forEach(d=>{
+  const school=scheduleRows.filter(x=>x.schedule_type==='school'&&x.weekday===d.weekday),schoolEnd=school.reduce((m,x)=>Math.max(m,timeToMin(x.ends_at)),0);
+  d.blocks=scheduleRows.filter(x=>{const m=String(x.notes||'').match(/\[NEARGO-DATE:(\d{4}-\d{2}-\d{2})\]/);return m?m[1]===d.key:x.weekday===d.weekday}).map(x=>({start:timeToMin(x.starts_at),end:timeToMin(x.ends_at)}));
+  const breakfast=!plannerGetDay(d.weekday).school;
+  const meals=[...(breakfast?[{title:'صبحانه',start:'09:00',duration:30}]:[]),{title:'ناهار',start:schoolEnd>13*60+30?'14:30':'13:30',duration:45},{title:'شام',start:'20:00',duration:30}];
+  meals.forEach(m=>{const a=timeToMin(m.start);tasks.push({user_id:uid,title:m.title,task_date:d.key,starts_at:m.start,duration_minutes:m.duration,task_type:'rest',priority:'low',notes:'[NEARGO-MEAL] وعده غذایی'});d.blocks.push({start:a,end:a+m.duration})});
+ });
+ const queue=[];
+ plannerFlow.extras.forEach(x=>{let mins=Math.round(Number(x.hours)*60);while(mins>0){const n=Math.min(50,mins);queue.push({subject:x.subject,type:x.type,duration:n,priority:'normal'});mins-=n}});
+ queue.sort(()=>Math.random()-.5);
+ queue.forEach((q,i)=>{const options=days.map((d,j)=>({d,j})).sort((a,b)=>a.d.minutes-b.d.minutes||Math.random()-.5);const pick=options[0].d;pick.sessions.push(q);pick.minutes+=q.duration});
+ const exams=[];
+ plannerDayOrder.forEach(d=>{const x=plannerGetDay(d.value);if(x.exam&&x.examSubject){const date=plannerDateKey(plannerDayDate(d.value));exams.push({user_id:uid,title:x.examSubject+' — '+x.examTopic,exam_type:'school',exam_date:date,exam_time:null,total_questions:0,notes:'[NEARGO_PLANNER_EXAM] '+JSON.stringify({subject:x.examSubject,topic:x.examTopic,priority:x.priority,source:'school'})})}});
+ plannerFlow.classes.forEach(c=>{if(c.exam&&c.examSubject){const date=plannerJToIso(...c.date.split('-').map(Number));exams.push({user_id:uid,title:c.examSubject+' — '+c.examTopic,exam_type:'other',exam_date:date,exam_time:null,total_questions:0,notes:'[NEARGO_PLANNER_EXAM] '+JSON.stringify({subject:c.examSubject,topic:c.examTopic,priority:'معمولی',source:'class'})})}});
+ exams.forEach(e=>{const examDay=days.find(d=>d.key===e.exam_date);if(examDay){const idx=days.indexOf(examDay);if(idx>0){const p=plannerFlow.days[examDay.weekday],mins=p.priority==='بسیار مهم'?90:p.priority==='کمی مهم'?40:60;days[idx-1].sessions.push({subject:e.title.split(' — ')[0],type:'مرور آزمون',duration:mins,priority:p.priority==='بسیار مهم'?'high':'normal',topic:e.title.split(' — ')[1]||''})}}});
+ days.forEach(d=>{
+  const school=plannerGetDay(d.weekday).school,schoolEnd=scheduleRows.filter(x=>x.schedule_type==='school'&&x.weekday===d.weekday).reduce((m,x)=>Math.max(m,timeToMin(x.ends_at)),0);
+  let cursor=school?Math.max(8*60,schoolEnd+30):8*60,studySinceBreak=0;
+  d.sessions.forEach(q=>{
+   const duration=q.duration;let found=-1;
+   for(let t=cursor;t+duration<=23*60+30;t+=5){if(!d.blocks.some(b=>t<b.end&&t+duration>b.start)){found=t;break}}
+   if(found<0)return;
+   tasks.push({user_id:uid,title:q.topic?'مرور '+q.subject+' · '+q.topic:(q.type==='مرور آزمون'?'آمادگی آزمون '+q.subject:'مطالعه '+q.subject),subject:q.subject,task_date:d.key,starts_at:minToTime(found),duration_minutes:duration,task_type:'study',priority:q.priority||'normal',notes:'[NEARGO-AUTO] برنامه ساخته‌شده از برنامه‌ریزی مرحله‌ای.'});
+   d.blocks.push({start:found,end:found+duration});cursor=found+duration+10;studySinceBreak+=duration;
+   if(studySinceBreak>=90&&cursor+20<=23*60+30&&!d.blocks.some(b=>cursor<b.end&&cursor+20>b.start)){tasks.push({user_id:uid,title:'استراحت ۲۰ دقیقه‌ای',task_date:d.key,starts_at:minToTime(cursor),duration_minutes:20,task_type:'rest',priority:'low',notes:'[NEARGO-AUTO] استراحت بین مطالعه‌ها'});d.blocks.push({start:cursor,end:cursor+20});cursor+=20;studySinceBreak=0}
+  });
+ });
+ return {tasks,exams};
+}
+async function saveSetupAndGenerate(){
+ $('setupNext').disabled=true;$('setupMessage').textContent='در حال ساخت برنامه هفتگی...';
+ try{
+  const uid=state.user.id,week=plannerWeekStart(),end=new Date(week);end.setDate(end.getDate()+7);
+  const oldSchedule=await db.from('student_schedule').delete().eq('user_id',uid).like('notes','[NEARGO-SETUP]%');if(oldSchedule.error)throw oldSchedule.error;
+  const scheduleRows=plannerMakeScheduleRows(uid);if(scheduleRows.length){const r=await db.from('student_schedule').insert(scheduleRows);if(r.error)throw r.error}
+  const oldIds=state.tasks.filter(x=>x.task_date>=plannerDateKey(week)&&x.task_date<plannerDateKey(end)&&String(x.notes||'').startsWith('[NEARGO-AUTO]')).map(x=>x.id);
+  if(oldIds.length){const r=await db.from('study_tasks').delete().eq('user_id',uid).in('id',oldIds);if(r.error)throw r.error}
+  const built=plannerBuildTasks(scheduleRows,uid);if(built.tasks.length){const r=await db.from('study_tasks').insert(built.tasks);if(r.error)throw r.error}
+  const newExams=built.exams.filter(e=>!state.exams.some(x=>x.exam_date===e.exam_date&&String(x.notes||'').startsWith('[NEARGO_PLANNER_EXAM]')&&x.title===e.title));
+  if(newExams.length){const r=await db.from('exams').insert(newExams);if(r.error)throw r.error}
+  const pref=await db.from('student_study_preferences').upsert({user_id:uid,subjects:plannerFlow.extras,setup_completed:true,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(pref.error)throw pref.error;
+  await loadAll();hide('planSetupView');show('appView');renderAll();setupRealtime();updateWeather();switchTab('planner');toast('برنامه هفتگی شمسی ساخته شد.');
+ }catch(e){$('setupMessage').textContent='ساخت برنامه انجام نشد: '+friendlyError(e);$('setupNext').disabled=false}
+}
+function renderPlanner(){
+ const host=$('plannerWeek');if(!host)return;
+ const start=plannerWeekStart(),names=['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه'];
+ const section=$('tab-planner');if(section){const heads=section.querySelectorAll('.section-head');if(heads[1])heads[1].style.display='none';const engine=section.querySelector('.planner-engine');if(engine)engine.style.display='none';const editor=$('taskEditorCard');if(editor)editor.style.display='none'}
+ host.innerHTML=Array.from({length:7},(_,i)=>{const date=new Date(start);date.setDate(date.getDate()+i);const key=plannerDateKey(date),wd=date.getDay(),events=[];
+  state.tasks.filter(x=>x.task_date===key).forEach(x=>events.push({title:x.title,subject:x.subject||x.title,start:x.starts_at||'--:--',end:x.starts_at?minToTime(timeToMin(x.starts_at)+num(x.duration_minutes)):'',kind:x.task_type==='rest'?'rest':'task',duration:x.duration_minutes}));
+  state.schedule.filter(x=>{const m=String(x.notes||'').match(/\[NEARGO-DATE:(\d{4}-\d{2}-\d{2})\]/);return m?m[1]===key:x.schedule_type==='school'&&x.weekday===wd}).forEach(x=>events.push({title:x.title,subject:x.schedule_type==='school'?'مدرسه':x.subject||'کلاس',start:x.starts_at,end:x.ends_at,kind:'fixed'}));
+  events.sort((a,b)=>a.start.localeCompare(b.start));
+  return '<div class="planner-day"><div class="planner-day-head">'+names[i]+' · '+plannerJDisplay(key)+'</div>'+(events.length?events.map(x=>'<div class="planner-event"><div class="planner-event-time">'+x.start+(x.end?' تا '+x.end:'')+'</div><div><div class="planner-event-title">'+esc(x.title)+'</div><div class="planner-event-meta">'+esc(x.subject||'فعالیت')+(x.duration?' · '+x.duration+' دقیقه':'')+(x.kind==='fixed'?' · ثابت':'')+'</div></div></div>').join(''):'<div class="planner-empty">برای این روز برنامه‌ای ثبت نشده است.</div>')+'</div>';
+ }).join('');
+}
+function renderSchedule(){}
+window.neargoOpenPlanner=showPlanSetup;
+window.addEventListener('neargo-open-planner',()=>showPlanSetup());
+
 })();
 </script>
-<script src="./neargo-enhancements.js?v=nav5"></script>
+<script src="./neargo-enhancements.js?v=nav6"></script>
 </body></html>
