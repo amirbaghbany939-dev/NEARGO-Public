@@ -79,3 +79,40 @@
 @media screen and (min-width:721px){
   .mobile-bottom-nav{display:none!important}
 }
+
+
+/* NEARGO Planner v2 — refined mobile-first experience */
+.planner-question-card{max-width:680px;margin:2vh auto;padding:clamp(22px,5vw,38px);border:1px solid #7658a1;border-radius:26px;background:radial-gradient(ellipse at 90% 0%,#8d65cf22,transparent 48%),linear-gradient(145deg,#211a34,#151123);box-shadow:0 24px 70px #05030b88;animation:plannerIn .32s ease both}
+.planner-day-kicker{display:inline-flex;padding:7px 12px;border:1px solid #a47aff44;border-radius:99px;color:#cbb5ff;background:#a47aff12;font-size:12px}
+.planner-question-card h2{font-size:clamp(21px,5vw,29px);line-height:1.9;margin:20px 0 24px}
+.planner-answer{min-height:64px;display:flex;align-items:center}
+.planner-answer input,.planner-answer select{font-size:17px;min-height:54px}
+.planner-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.planner-choice button{min-height:58px;font-size:17px}
+.planner-hint{font-size:12px;color:#a99bbd;line-height:2;margin:20px 0 0}
+.planner-review{text-align:center;padding:20px;color:#cfc1e3}
+.planner-review>span{font-size:48px;color:#74e0bd}
+.planner-review h2{margin:10px 0}
+.planner-jdate,.jalali-date-control{display:grid;grid-template-columns:1fr 1.2fr .8fr;gap:7px;width:100%}
+.planner-jdate select,.jalali-date-control select{min-width:0;padding:12px 7px;font-size:13px}
+.jalali-date-control{margin-top:5px}
+#planSetupView .setup-progress{margin:16px 0 22px}
+#planSetupView .setup-actions{max-width:680px;margin:20px auto}
+#tab-planner .planner-week{gap:12px}
+#tab-planner .planner-day{background:linear-gradient(145deg,#191429,#12101d);border-color:#ffffff18;border-radius:18px;padding:15px}
+#tab-planner .planner-day-head{font-size:14px;color:#e7d9ff;padding-bottom:10px}
+#tab-planner .planner-event{grid-template-columns:88px minmax(0,1fr);border-top:1px solid #ffffff12}
+#tab-planner .planner-event-time{direction:ltr;text-align:center;font-variant-numeric:tabular-nums}
+#tab-planner .planner-event-title{font-size:13px}
+#tab-planner .planner-engine,#tab-planner #taskEditorCard{display:none!important}
+@keyframes plannerIn{from{opacity:0;transform:translateY(9px) scale(.99)}to{opacity:1;transform:none}}
+@media(max-width:720px){.planner-question-card{margin:10px 0;padding:22px 18px;border-radius:22px}.planner-choice{gap:8px}.planner-choice button{padding:10px 5px}.planner-jdate,.jalali-date-control{gap:5px}.planner-jdate select,.jalali-date-control select{font-size:12px;padding:10px 4px}#planSetupView .setup-actions{padding-bottom:8px}}
+/* Subtle motion polish for the home dashboard */
+#tab-dashboard .hero{isolation:isolate}
+#tab-dashboard .hero:before{animation:homeGlow 9s ease-in-out infinite alternate}
+#tab-dashboard .hero:after{content:"";position:absolute;inset:auto auto -95px 18%;width:210px;height:210px;border:1px solid #c7a5ff22;border-radius:50%;animation:homeRing 20s linear infinite;pointer-events:none}
+#tab-dashboard .card{transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+#tab-dashboard .card:hover{transform:translateY(-3px);border-color:#8b6ab455;box-shadow:0 15px 34px #05030b55}
+@keyframes homeGlow{to{transform:translate(24px,18px) scale(1.15);opacity:.75}}
+@keyframes homeRing{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#tab-dashboard .hero:before,#tab-dashboard .hero:after,#tab-dashboard .card,.planner-question-card{animation:none!important;transition:none!important}}
