@@ -664,7 +664,7 @@ function plannerSteps(){
   s.push({key:base+'examSource',day:d.label,label:'آزمون '+d.label+' مدرسه‌ای است یا خارج از مدرسه؟',type:'select',options:['مدرسه','خارج از مدرسه'],when:()=>x.exam===true,get:()=>x.examSource,set:v=>x.examSource=v});
   s.push({key:base+'examSubject',day:d.label,label:'درس آزمون '+d.label+' چیست؟',type:'text',when:()=>x.exam===true,get:()=>x.examSubject,set:v=>x.examSubject=v});
   s.push({key:base+'examTopic',day:d.label,label:'موضوع آزمون '+d.label+' چیست؟',type:'text',when:()=>x.exam===true,get:()=>x.examTopic,set:v=>x.examTopic=v});
-  s.push({key:base+'priority',day:d.label,label:'اهمیت آزمون '+d.label+' چقدر است؟',type:'select',options:['کم‌اهمیت','کمی مهم','معمولی','بسیار مهم'],when:()=>x.exam===true,get:()=>x.priority,set:v=>x.priority=v});
+  s.push({key:base+'priority',day:d.label,label:'اهمیت آزمون '+d.label+' چقدر است؟',type:'priority',options:['مهم نیست','کمی مهم','معمولی','بسیار مهم'],when:()=>x.exam===true,get:()=>x.priority,set:v=>x.priority=v});
  });
  s.push({key:'hasClasses',label:'آیا کلاس خارج از مدرسه داری؟',type:'yesno',get:()=>plannerFlow.hasClasses,set:v=>{plannerFlow.hasClasses=v;if(v&&plannerFlow.classes.length===0)plannerFlow.classes.push({date:plannerJToday(),title:'',start:'16:00',hours:2,exam:null,examSource:'خارج از مدرسه',examSubject:'',examTopic:''});if(!v)plannerFlow.classes=[]}});
  plannerFlow.classes.forEach((x,i)=>{
@@ -715,11 +715,12 @@ function renderSetupStep(){
  $('setupStepLabel').textContent='پرسش '+Math.min(plannerFlow.index+1,steps.length)+' از '+steps.length;
  $('setupProgressBar').style.width=Math.min(100,((plannerFlow.index+1)/steps.length)*100)+'%';
  $('setupBack').style.visibility=plannerFlow.index===0?'hidden':'visible';
- $('setupNext').textContent=step?.type==='review'?'ساخت برنامه هفتگی':'بعدی';$('setupNext').style.display=step?.type==='yesno'?'none':'';
+ $('setupNext').textContent=step?.type==='review'?'ساخت برنامه هفتگی':'بعدی';$('setupNext').style.display=(step?.type==='yesno'||step?.type==='priority')?'none':'';
  $('setupMessage').textContent='';
  if(!step){host.innerHTML='<div class="planner-review"><h2>اطلاعات کامل شد</h2><p>برای ساخت برنامه هفتگی آماده‌ایم.</p></div>';return}
  let input='';
  if(step.type==='yesno')input='<div class="planner-choice"><button type="button" data-answer="yes">بله</button><button type="button" class="ghost" data-answer="no">خیر</button></div>';
+ else if(step.type==='priority')input='<div class="planner-priority-axis">'+step.options.map((x,i)=>'<button type="button" data-priority="'+x+'" class="'+(x===step.get()?'selected':'')+'"><i>'+(i+1)+'</i><b>'+x+'</b></button>').join('')+'</div>';
  else if(step.type==='review')input='<div class="planner-review"><span>✓</span><p>اطلاعات مدرسه، آزمون‌ها، کلاس‌ها و درس‌های اضافه ثبت شده‌اند.</p><small>تاریخ‌ها همگی شمسی هستند.</small></div>';
  else if(step.type==='jalali-date')input=plannerRenderDateSelect(step.get());
  else if(step.type==='select')input='<select id="plannerAnswer">'+step.options.map(x=>'<option '+(x===step.get()?'selected':'')+'>'+x+'</option>').join('')+'</select>';
@@ -727,7 +728,7 @@ function renderSetupStep(){
  const dayLabel=step.day?'<span class="planner-day-kicker">روز '+step.day+'</span>':'<span class="planner-day-kicker">تنظیم برنامه هفتگی</span>';
  host.innerHTML='<div class="planner-question-card">'+dayLabel+'<h2>'+step.label+'</h2><div class="planner-answer">'+input+'</div><p class="planner-hint">'+(step.type==='jalali-date'?'تاریخ را به تقویم شمسی انتخاب کن.':step.type==='review'?'':'در هر مرحله فقط همین یک سؤال نمایش داده می‌شود.')+'</p></div>';
  const updateJDays=()=>{const ys=$('plannerJYear'),ms=$('plannerJMonth'),ds=$('plannerJDay');if(ys&&ms&&ds){const y=Number(ys.value),m=Number(ms.value),max=m<=6?31:m<=11?30:(plannerJYearStart(y+1)-plannerJYearStart(y))/86400000-336,old=Number(ds.value);ds.innerHTML=Array.from({length:max},(_,i)=>'<option value="'+(i+1)+'">'+new Intl.NumberFormat('fa-IR').format(i+1)+'</option>').join('');ds.value=Math.min(old||1,max)}};['plannerJYear','plannerJMonth'].forEach(id=>$(id)?.addEventListener('change',updateJDays));
- host.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{step.set(b.dataset.answer==='yes');plannerAfterAnswer(step)});
+ host.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{step.set(b.dataset.answer==='yes');plannerAfterAnswer(step)});host.querySelectorAll('[data-priority]').forEach(b=>b.onclick=()=>{step.set(b.dataset.priority);plannerAfterAnswer(step)});
  $('setupMessage').textContent='';
 }
 function plannerAfterAnswer(step){
@@ -824,6 +825,7 @@ function renderPlanner(){
  host.innerHTML=Array.from({length:7},(_,i)=>{const date=new Date(start);date.setDate(date.getDate()+i);const key=plannerDateKey(date),wd=date.getDay(),events=[];
   state.tasks.filter(x=>x.task_date===key).forEach(x=>events.push({title:x.title,subject:x.subject||x.title,start:x.starts_at||'--:--',end:x.starts_at?minToTime(timeToMin(x.starts_at)+num(x.duration_minutes)):'',kind:x.task_type==='rest'?'rest':'task',duration:x.duration_minutes}));
   state.schedule.filter(x=>{const m=String(x.notes||'').match(/\[NEARGO-DATE:(\d{4}-\d{2}-\d{2})\]/);return m?m[1]===key:x.schedule_type==='school'&&x.weekday===wd}).forEach(x=>events.push({title:x.title,subject:x.schedule_type==='school'?'مدرسه':x.subject||'کلاس',start:x.starts_at,end:x.ends_at,kind:'fixed'}));
+  (state.exams||[]).filter(x=>x.exam_date===key).forEach(x=>events.push({title:'آزمون · '+x.title,subject:x.exam_type==='school'?'آزمون مدرسه':'آزمون خارج از مدرسه',start:x.exam_time||'—',end:'',kind:'exam'}));
   events.sort((a,b)=>a.start.localeCompare(b.start));
   return '<div class="planner-day"><div class="planner-day-head">'+names[i]+' · '+plannerJDisplay(key)+'</div>'+(events.length?events.map(x=>'<div class="planner-event"><div class="planner-event-time">'+x.start+(x.end?' تا '+x.end:'')+'</div><div><div class="planner-event-title">'+esc(x.title)+'</div><div class="planner-event-meta">'+esc(x.subject||'فعالیت')+(x.duration?' · '+x.duration+' دقیقه':'')+(x.kind==='fixed'?' · ثابت':'')+'</div></div></div>').join(''):'<div class="planner-empty">برای این روز برنامه‌ای ثبت نشده است.</div>')+'</div>';
  }).join('');
